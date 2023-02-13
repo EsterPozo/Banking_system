@@ -2,10 +2,9 @@ package com.ironhack.demosecurityjwt.models.account;
 
 
 import com.ironhack.demosecurityjwt.models.Money;
-import com.ironhack.demosecurityjwt.models.account.enums.AccountType;
+
 import com.ironhack.demosecurityjwt.models.account.enums.Status;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
-import com.ironhack.demosecurityjwt.models.user.User;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -13,7 +12,7 @@ import java.time.LocalDateTime;
 
 
 @Entity
-public class CheckingAccount extends Account {
+public class Checking extends Account {
     /*Checking Accounts should have:
 
     A balance (account)
@@ -50,17 +49,17 @@ public class CheckingAccount extends Account {
 
     private LocalDateTime creationDate;
 
-    public CheckingAccount() {
+    public Checking() {
         setMinimumBalance(MINIMUM_BALANCE);
         setMonthlyMaintenanceFee(MONTHLY_MAINTENANCE_FEE);
         setStatus(Status.ACTIVE);
-        setAccountType(AccountType.CHECKING);
+
         setCreationDate(LocalDateTime.now());
 
     }
 
-    public CheckingAccount(AccountType accountType, Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
-        super(accountType, id, balance, primaryOwner, secondaryOwner);
+    public Checking(Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+        super( id, balance, primaryOwner, secondaryOwner);
     }
 
     public String getSecretKey() {

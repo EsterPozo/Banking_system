@@ -23,16 +23,8 @@ public abstract class Account {
 
     // The penaltyFee for all accounts should be 40.
     private final static Money PENALTY_FEE = new Money(BigDecimal.valueOf(40.));
-    @Enumerated(EnumType.STRING)
-    private AccountType accountType;
 
-    public AccountType getAccountType() {
-        return accountType;
-    }
 
-    public void setAccountType(AccountType accountType) {
-        this.accountType = accountType;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,8 +49,8 @@ public abstract class Account {
     public Account() {
     }
 
-    public Account(AccountType accountType, Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
-        this.accountType = accountType;
+    public Account( Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+
         this.id = id;
         this.balance = balance;
         this.primaryOwner = primaryOwner;

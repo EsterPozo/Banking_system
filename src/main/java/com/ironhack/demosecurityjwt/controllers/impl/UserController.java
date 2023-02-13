@@ -26,7 +26,7 @@ public class UserController {
      *
      * @return list of all users
      */
-    @GetMapping("/users")
+    @GetMapping("/bank/users")
     @ResponseStatus(HttpStatus.OK)
     public List<User> getUsers() {
         return userService.getUsers();
@@ -37,7 +37,7 @@ public class UserController {
      *
      * @param user the user to be saved
      */
-    @PostMapping("/users")
+    @PostMapping("/bank/users")
     @ResponseStatus(HttpStatus.CREATED)
     public void saveUser(@RequestBody User user) {
         userService.saveUser(user);

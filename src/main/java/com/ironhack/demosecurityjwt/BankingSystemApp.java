@@ -13,10 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 
 @SpringBootApplication
-public class DemoSecurityJwtApplication {
+public class BankingSystemApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoSecurityJwtApplication.class, args);
+        SpringApplication.run(BankingSystemApp.class, args);
     }
 
     @Bean

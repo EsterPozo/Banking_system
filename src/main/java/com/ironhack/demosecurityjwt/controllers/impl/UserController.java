@@ -1,6 +1,6 @@
 package com.ironhack.demosecurityjwt.controllers.impl;
 
-import com.ironhack.demosecurityjwt.models.User;
+import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

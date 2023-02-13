@@ -1,7 +1,7 @@
 package com.ironhack.demosecurityjwt.services.interfaces;
 
-import com.ironhack.demosecurityjwt.models.Role;
-import com.ironhack.demosecurityjwt.models.User;
+import com.ironhack.demosecurityjwt.models.user.Role;
+import com.ironhack.demosecurityjwt.models.user.User;
 
 import java.util.List;
 

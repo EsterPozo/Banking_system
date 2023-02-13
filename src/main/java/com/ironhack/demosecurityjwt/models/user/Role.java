@@ -1,4 +1,4 @@
-package com.ironhack.demosecurityjwt.models;
+package com.ironhack.demosecurityjwt.models.user;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+
 public class Role {
     /**
      * The primary key for the Role table
@@ -29,4 +29,13 @@ public class Role {
      * The name of the role
      */
     private String name;
+
+    public Role(String name) {
+        this.name = name;
+    }
+
+    public Role(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

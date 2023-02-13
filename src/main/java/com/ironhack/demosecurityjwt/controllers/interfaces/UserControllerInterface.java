@@ -1,6 +1,6 @@
 package com.ironhack.demosecurityjwt.controllers.interfaces;
 
-import com.ironhack.demosecurityjwt.models.User;
+import com.ironhack.demosecurityjwt.models.user.User;
 
 import java.util.List;
 

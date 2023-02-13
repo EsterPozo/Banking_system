@@ -2,7 +2,7 @@ package com.ironhack.demosecurityjwt.controllers.impl;
 
 import com.ironhack.demosecurityjwt.dtos.RoleToUserDTO;
 import com.ironhack.demosecurityjwt.controllers.interfaces.RoleControllerInterface;
-import com.ironhack.demosecurityjwt.models.Role;
+import com.ironhack.demosecurityjwt.models.user.Role;
 import com.ironhack.demosecurityjwt.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

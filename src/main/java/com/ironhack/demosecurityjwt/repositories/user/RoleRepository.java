@@ -1,4 +1,4 @@
-package com.ironhack.demosecurityjwt.repositories;
+package com.ironhack.demosecurityjwt.repositories.user;
 
 import com.ironhack.demosecurityjwt.models.user.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

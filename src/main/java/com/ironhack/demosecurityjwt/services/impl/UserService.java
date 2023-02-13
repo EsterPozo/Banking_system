@@ -2,8 +2,8 @@ package com.ironhack.demosecurityjwt.services.impl;
 
 import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.models.user.Role;
-import com.ironhack.demosecurityjwt.repositories.RoleRepository;
-import com.ironhack.demosecurityjwt.repositories.UserRepository;
+import com.ironhack.demosecurityjwt.repositories.user.RoleRepository;
+import com.ironhack.demosecurityjwt.repositories.user.UserRepository;
 import com.ironhack.demosecurityjwt.services.interfaces.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

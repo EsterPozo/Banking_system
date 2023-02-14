@@ -1,8 +1,8 @@
-package com.ironhack.demosecurityjwt.dtos;
+package com.ironhack.demosecurityjwt.dtos.user;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class ThirdPartyDTO extends UserDTO{
+public class ThirdPartyDTO extends UserDTO {
     @NotBlank(message = "Hashed Key is required")
     private String hashedKey;
 

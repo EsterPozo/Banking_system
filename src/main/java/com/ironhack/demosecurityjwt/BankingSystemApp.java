@@ -2,7 +2,7 @@ package com.ironhack.demosecurityjwt;
 
 import com.ironhack.demosecurityjwt.models.user.Role;
 import com.ironhack.demosecurityjwt.models.user.User;
-import com.ironhack.demosecurityjwt.services.impl.UserService;
+import com.ironhack.demosecurityjwt.services.impl.user.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

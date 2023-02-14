@@ -1,8 +1,8 @@
 package com.ironhack.demosecurityjwt.controllers.impl;
 
-import com.ironhack.demosecurityjwt.dtos.ThirdPartyDTO;
+import com.ironhack.demosecurityjwt.dtos.user.ThirdPartyDTO;
 import com.ironhack.demosecurityjwt.models.user.ThirdParty;
-import com.ironhack.demosecurityjwt.services.impl.ThirdPartyService;
+import com.ironhack.demosecurityjwt.services.impl.user.ThirdPartyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

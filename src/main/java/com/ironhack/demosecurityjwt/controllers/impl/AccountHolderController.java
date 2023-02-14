@@ -1,8 +1,8 @@
 package com.ironhack.demosecurityjwt.controllers.impl;
 
-import com.ironhack.demosecurityjwt.dtos.AccountHolderDTO;
+import com.ironhack.demosecurityjwt.dtos.user.AccountHolderDTO;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
-import com.ironhack.demosecurityjwt.services.impl.AccountHolderService;
+import com.ironhack.demosecurityjwt.services.impl.user.AccountHolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

@@ -18,6 +18,9 @@ public class Savings extends Account{
 
     private BigDecimal interestRate;
     private LocalDateTime creationDate;
+    private String secretKey;
+
+
 
     @Embedded
     @AttributeOverrides({
@@ -66,5 +69,13 @@ public class Savings extends Account{
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
     }
 }

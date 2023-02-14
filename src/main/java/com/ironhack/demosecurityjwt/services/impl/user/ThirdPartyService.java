@@ -1,6 +1,6 @@
-package com.ironhack.demosecurityjwt.services.impl;
+package com.ironhack.demosecurityjwt.services.impl.user;
 
-import com.ironhack.demosecurityjwt.dtos.ThirdPartyDTO;
+import com.ironhack.demosecurityjwt.dtos.user.ThirdPartyDTO;
 import com.ironhack.demosecurityjwt.models.user.Role;
 import com.ironhack.demosecurityjwt.models.user.ThirdParty;
 import com.ironhack.demosecurityjwt.repositories.user.ThirdPartyRepository;

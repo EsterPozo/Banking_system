@@ -10,8 +10,17 @@ import java.time.LocalDateTime;
 @Entity
 public class StudentChecking extends Account{
     private LocalDateTime creationDate;
+    private String secretKey;
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
 
     public StudentChecking() {
         setCreationDate(LocalDateTime.now());

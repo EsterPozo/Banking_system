@@ -1,6 +1,5 @@
-package com.ironhack.demosecurityjwt.dtos;
+package com.ironhack.demosecurityjwt.dtos.user;
 
-import com.ironhack.demosecurityjwt.models.user.User;
 import jakarta.validation.constraints.NotBlank;
 
 public class AccountHolderDTO extends UserDTO {

@@ -1,6 +1,6 @@
 package com.ironhack.demosecurityjwt.controllers.interfaces;
 
-import com.ironhack.demosecurityjwt.dtos.RoleToUserDTO;
+import com.ironhack.demosecurityjwt.dtos.user.RoleToUserDTO;
 import com.ironhack.demosecurityjwt.models.user.Role;
 
 public interface RoleControllerInterface {

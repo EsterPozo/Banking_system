@@ -1,4 +1,4 @@
-package com.ironhack.demosecurityjwt.services.impl;
+package com.ironhack.demosecurityjwt.services.impl.user;
 
 import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.models.user.Role;

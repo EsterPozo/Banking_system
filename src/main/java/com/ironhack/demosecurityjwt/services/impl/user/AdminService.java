@@ -1,10 +1,8 @@
-package com.ironhack.demosecurityjwt.services.impl;
+package com.ironhack.demosecurityjwt.services.impl.user;
 
-import com.ironhack.demosecurityjwt.dtos.UserDTO;
+import com.ironhack.demosecurityjwt.dtos.user.UserDTO;
 import com.ironhack.demosecurityjwt.models.user.Admin;
-import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.repositories.user.AdminRepository;
-import com.ironhack.demosecurityjwt.repositories.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

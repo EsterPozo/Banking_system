@@ -1,9 +1,6 @@
 package com.ironhack.demosecurityjwt.controllers.impl.account;
 
-import com.ironhack.demosecurityjwt.dtos.account.CheckingDTO;
-import com.ironhack.demosecurityjwt.dtos.account.CreditCardDTO;
-import com.ironhack.demosecurityjwt.dtos.account.NewBalanceDTO;
-import com.ironhack.demosecurityjwt.dtos.account.SavingsDTO;
+import com.ironhack.demosecurityjwt.dtos.account.*;
 import com.ironhack.demosecurityjwt.models.account.Account;
 import com.ironhack.demosecurityjwt.models.account.Savings;
 import com.ironhack.demosecurityjwt.models.user.User;
@@ -47,22 +44,22 @@ public class AccountController {
         return accountService.getAccountsByOwner(id);
     }
 
-    @PostMapping("/bank/accounts/checking/{id1}/{id2}")
+    @PostMapping("/bank/accounts/checking/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Account addChecking(@RequestBody CheckingDTO checkingDTO,@PathVariable Long id1, @PathVariable Optional<Long> id2) {
-        return accountService.addChecking(checkingDTO,id1, id2);
+    public Account addChecking(@RequestBody AccountDTO accountDTO) {
+        return accountService.addChecking(accountDTO);
     }
 
-    @PostMapping("/bank/accounts/savings/{id1}/{id2}")
+    @PostMapping("/bank/accounts/savings/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Account addSavings(@RequestBody SavingsDTO savingsDTO, @PathVariable Long id1, @PathVariable Optional<Long> id2) {
-        return accountService.addSavings(savingsDTO, id1, id2);
+    public Account addSavings(@RequestBody AccountDTO accountDTO) {
+        return accountService.addSavings(accountDTO);
     }
 
-    @PostMapping("/bank/accounts/creditcard/{id1}/{id2}")
+    @PostMapping("/bank/accounts/creditcard/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Account addCreditCard(@RequestBody CreditCardDTO creditCardDTO, @PathVariable Long id1, @PathVariable Optional<Long> id2) {
-        return accountService.addCreditCard(creditCardDTO, id1, id2);
+    public Account addCreditCard(@RequestBody AccountDTO accountDTO) {
+        return accountService.addCreditCard(accountDTO);
     }
 
     @PatchMapping("/bank/accounts/{id}")

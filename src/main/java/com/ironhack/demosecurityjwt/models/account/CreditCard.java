@@ -7,13 +7,9 @@ import java.math.BigDecimal;
 
 @Entity
 public class CreditCard extends Account {
-    private static final Double VALID_MIN_CREDIT_LIMIT = 100.0;
-    private static final Double VALID_MAX_CREDIT_LIMIT = 100000.0;
-    private static final Double VALID_MIN_INTEREST_RATE = 0.1;
-    private static final Double VALID_MAX_INTEREST_RATE = 0.2;
 
-    private static final Money DEFAULT_CREDIT_LIMIT = new Money(BigDecimal.valueOf(VALID_MIN_CREDIT_LIMIT));
-    private static final BigDecimal DEFAULT_INTEREST_RATE = BigDecimal.valueOf(VALID_MAX_INTEREST_RATE);
+    private static final Money DEFAULT_CREDIT_LIMIT = new Money(BigDecimal.valueOf(100.0));
+    private static final BigDecimal DEFAULT_INTEREST_RATE = BigDecimal.valueOf(0.2);
 
     private Money creditLimit;
     private BigDecimal interestRate;
@@ -23,11 +19,25 @@ public class CreditCard extends Account {
         setInterestRate(DEFAULT_INTEREST_RATE);
     }
 
+    //both constructors should be together??
+    public CreditCard(Money creditLimit) {
+        setCreditLimit(creditLimit);
+        setInterestRate(DEFAULT_INTEREST_RATE);
+    }
+
+    public CreditCard(BigDecimal interestRate) {
+        setCreditLimit(DEFAULT_CREDIT_LIMIT);
+        setInterestRate(interestRate);
+    }
+
     public Money getCreditLimit() {
         return creditLimit;
     }
 
     public void setCreditLimit(Money creditLimit) {
+        if(creditLimit.getAmount().compareTo(BigDecimal.valueOf(100)) > 0 || creditLimit.getAmount().compareTo(BigDecimal.valueOf(100000)) < 0 ) {
+            throw new IllegalArgumentException("credit limit can't be higher than 100.000");
+        }
         this.creditLimit = creditLimit;
     }
 
@@ -36,6 +46,8 @@ public class CreditCard extends Account {
     }
 
     public void setInterestRate(BigDecimal interestRate) {
+        if (interestRate.compareTo(BigDecimal.valueOf(0.2)) < 0 || interestRate.compareTo(BigDecimal.valueOf(0.1)) > 0  )
+            throw new IllegalArgumentException("interest rate can't be lower than 0.1");
         this.interestRate = interestRate;
     }
 }

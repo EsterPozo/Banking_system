@@ -44,6 +44,9 @@ public class Checking extends Account {
             @AttributeOverride(name = "amount", column = @Column(name = "monthly_fee_amount"))
     })
     private Money monthlyMaintenanceFee;
+
+
+
     @Enumerated(EnumType.STRING)
     private Status status;
 

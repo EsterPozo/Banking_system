@@ -23,6 +23,8 @@ public class Transaction {
     @Embedded
     private Money amount;
 
+    //timestamp missing - para comprobar el tiempo
+
     @Enumerated(EnumType.STRING)
     private TransType transType;
 

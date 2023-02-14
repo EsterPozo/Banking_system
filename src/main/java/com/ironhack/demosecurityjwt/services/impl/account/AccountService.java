@@ -1,9 +1,6 @@
 package com.ironhack.demosecurityjwt.services.impl.account;
 
-import com.ironhack.demosecurityjwt.dtos.account.CheckingDTO;
-import com.ironhack.demosecurityjwt.dtos.account.CreditCardDTO;
-import com.ironhack.demosecurityjwt.dtos.account.NewBalanceDTO;
-import com.ironhack.demosecurityjwt.dtos.account.SavingsDTO;
+import com.ironhack.demosecurityjwt.dtos.account.*;
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.*;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
@@ -95,86 +92,93 @@ public class AccountService {
         }
     }
 
-    public Account addChecking(CheckingDTO checkingDTO, Long id, Optional<Long> otherId) {
-        if (!accountHolderRepository.existsById(id) || (otherId.isPresent()) && !accountHolderRepository.existsById(otherId.get()))
-            throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
-
-        AccountHolder owner = accountHolderRepository.findById(id).get();
-        AccountHolder otherOwner = new AccountHolder();
-        if (otherId.isPresent()) {
-             otherOwner = accountHolderRepository.findById(otherId.get()).get();
-        } else {
-            otherOwner = null;
-        }
-
-        LocalDate today = LocalDate.now();
-        int age = owner.getDateOfBirth().until(today).getYears();
-
-        if (age < 24) {
-            StudentChecking studentChecking = new StudentChecking();
-            studentChecking.setPrimaryOwner(owner);
-            studentChecking.setSecondaryOwner(otherOwner);
-            studentChecking.setBalance(new Money(checkingDTO.getBalance()));
-            studentChecking.setSecretKey(checkingDTO.getSecretKey());
-
-            return studentCheckingRepository.save(studentChecking);
-        }
-
-        Checking checking = new Checking();
-        checking.setPrimaryOwner(owner);
-        checking.setSecondaryOwner(otherOwner);
-        checking.setBalance(new Money(checkingDTO.getBalance()));
-        checking.setSecretKey(checkingDTO.getSecretKey());
-
-        return checkingRepository.save(checking);
-
-    }
-
-    public Account addSavings(SavingsDTO savingsDTO, Long id, Optional<Long> otherId) {
-        if (!accountHolderRepository.existsById(id) || (otherId.isPresent() && !accountHolderRepository.existsById(otherId.get()))) {
+    public Account addChecking(AccountDTO accountDTO) {
+        if (!accountHolderRepository.existsById(accountDTO.getOwnerId()) || !accountHolderRepository.existsById(accountDTO.getOtherOwnerId())) {
             throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
         }
+            AccountHolder owner = accountHolderRepository.findById(accountDTO.getOwnerId()).get();
+            AccountHolder otherOwner = accountHolderRepository.findById(accountDTO.getOtherOwnerId()).get();
 
-        AccountHolder owner = accountHolderRepository.findById(id).get();
-        AccountHolder otherOwner = new AccountHolder();
-        if (otherId.isPresent()) {
-            otherOwner = accountHolderRepository.findById(otherId.get()).get();
-        } else {
-            otherOwner = null;
+            //        AccountHolder owner = accountHolderRepository.findById(id).get();
+//        AccountHolder otherOwner = new AccountHolder();
+//        if (otherId.isPresent()) {
+//             otherOwner = accountHolderRepository.findById(otherId.get()).get();
+//        } else {
+//            otherOwner = null;
+//        }
+
+            LocalDate today = LocalDate.now();
+            int age = owner.getDateOfBirth().until(today).getYears();
+
+            if (age < 24) {
+                StudentChecking studentChecking = new StudentChecking();
+                studentChecking.setPrimaryOwner(owner);
+                studentChecking.setSecondaryOwner(otherOwner);
+                studentChecking.setBalance(new Money(accountDTO.getBalance()));
+                studentChecking.setSecretKey(accountDTO.getSecretKey());
+
+                return studentCheckingRepository.save(studentChecking);
+            }
+
+            Checking checking = new Checking();
+            checking.setPrimaryOwner(owner);
+            checking.setSecondaryOwner(otherOwner);
+            checking.setBalance(new Money(accountDTO.getBalance()));
+            checking.setSecretKey(accountDTO.getSecretKey());
+
+            return checkingRepository.save(checking);
+
         }
+
+
+    /*Crear AccountDTO genérico para incluido los ids*/
+
+    public Account addSavings(AccountDTO accountDTO) {
+        if (!accountHolderRepository.existsById(accountDTO.getOwnerId()) || !accountHolderRepository.existsById(accountDTO.getOtherOwnerId())) {
+            throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
+        }
+
+        AccountHolder owner = accountHolderRepository.findById(accountDTO.getOwnerId()).get();
+        AccountHolder otherOwner = accountHolderRepository.findById(accountDTO.getOtherOwnerId()).get();
+
+//        AccountHolder otherOwner = new AccountHolder();
+//        if (otherId.isPresent()) {
+//            otherOwner = accountHolderRepository.findById(otherId.get()).get();
+//        } else {
+//            otherOwner = null;
+//        }
 
         Savings savings = new Savings();
         savings.setPrimaryOwner(owner);
         savings.setSecondaryOwner(otherOwner);
-        savings.setBalance(new Money(savingsDTO.getBalance()));
-        savings.setSecretKey(savingsDTO.getSecretKey());
-        savings.setInterestRate(savingsDTO.getInterestRate());
-        savings.setMinimumBalance(new Money(savingsDTO.getMinBalance()));
+        savings.setBalance(new Money(accountDTO.getBalance()));
+        savings.setSecretKey(accountDTO.getSecretKey());
+        savings.setInterestRate(accountDTO.getInterestRate());
+        savings.setMinimumBalance(new Money(accountDTO.getMinBalance()));
 
         return savingsRepository.save(savings);
-
-
-
     }
 
-    public Account addCreditCard(CreditCardDTO creditCardDTO, Long id, Optional<Long> otherId) {
-        if (!accountHolderRepository.existsById(id) || (otherId.isPresent() && !accountHolderRepository.existsById(otherId.get()))) {
+    public Account addCreditCard(AccountDTO accountDTO) {
+        if (!accountHolderRepository.existsById(accountDTO.getOwnerId()) || !accountHolderRepository.existsById(accountDTO.getOtherOwnerId())) {
             throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
         }
+        AccountHolder owner = accountHolderRepository.findById(accountDTO.getOwnerId()).get();
+        AccountHolder otherOwner = accountHolderRepository.findById(accountDTO.getOtherOwnerId()).get();
 
-        AccountHolder owner = accountHolderRepository.findById(id).get();
-        AccountHolder otherOwner = new AccountHolder();
-        if (otherId.isPresent()) {
-            otherOwner = accountHolderRepository.findById(otherId.get()).get();
-        } else {
-            otherOwner = null;
-        }
+//        AccountHolder owner = accountHolderRepository.findById(id).get();
+//        AccountHolder otherOwner = new AccountHolder();
+//        if (otherId.isPresent()) {
+//            otherOwner = accountHolderRepository.findById(otherId.get()).get();
+//        } else {
+//            otherOwner = null;
+//        }
 
         CreditCard creditCard = new CreditCard();
         creditCard.setPrimaryOwner(owner);
         creditCard.setSecondaryOwner(otherOwner);
-        creditCard.setBalance(new Money(creditCardDTO.getBalance()));
-        creditCard.setInterestRate(creditCardDTO.getInterestRate());
+        creditCard.setBalance(new Money(accountDTO.getBalance()));
+        creditCard.setInterestRate(accountDTO.getInterestRate());
 
         return creditCardRepository.save(creditCard);
 

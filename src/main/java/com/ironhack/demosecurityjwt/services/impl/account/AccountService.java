@@ -1,6 +1,9 @@
 package com.ironhack.demosecurityjwt.services.impl.account;
 
 import com.ironhack.demosecurityjwt.dtos.account.CheckingDTO;
+import com.ironhack.demosecurityjwt.dtos.account.CreditCardDTO;
+import com.ironhack.demosecurityjwt.dtos.account.NewBalanceDTO;
+import com.ironhack.demosecurityjwt.dtos.account.SavingsDTO;
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.*;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
@@ -104,4 +107,68 @@ public class AccountService {
 
     }
 
+    public Account AddSavings(SavingsDTO savingsDTO, Long id, Optional<Long> otherId) {
+        if (!accountHolderRepository.existsById(id) || (otherId.isPresent() && !accountHolderRepository.existsById(otherId.get()))) {
+            throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
+        }
+
+        AccountHolder owner = accountHolderRepository.findById(id).get();
+        AccountHolder otherOwner = new AccountHolder();
+        if (otherId.isPresent()) {
+            otherOwner = accountHolderRepository.findById(otherId.get()).get();
+        } else {
+            otherOwner = null;
+        }
+
+        Savings savings = new Savings();
+        savings.setPrimaryOwner(owner);
+        savings.setSecondaryOwner(otherOwner);
+        savings.setBalance(new Money(savingsDTO.getBalance()));
+        savings.setSecretKey(savingsDTO.getSecretKey());
+        savings.setInterestRate(savingsDTO.getInterestRate());
+        savings.setMinimumBalance(new Money(savingsDTO.getMinBalance()));
+
+        return savingsRepository.save(savings);
+
+
+
+    }
+
+    public Account AddCreditCard(CreditCardDTO creditCardDTO, Long id, Optional<Long> otherId) {
+        if (!accountHolderRepository.existsById(id) || (otherId.isPresent() && !accountHolderRepository.existsById(otherId.get()))) {
+            throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
+        }
+
+        AccountHolder owner = accountHolderRepository.findById(id).get();
+        AccountHolder otherOwner = new AccountHolder();
+        if (otherId.isPresent()) {
+            otherOwner = accountHolderRepository.findById(otherId.get()).get();
+        } else {
+            otherOwner = null;
+        }
+
+        CreditCard creditCard = new CreditCard();
+        creditCard.setPrimaryOwner(owner);
+        creditCard.setSecondaryOwner(otherOwner);
+        creditCard.setBalance(new Money(creditCardDTO.getBalance()));
+        creditCard.setInterestRate(creditCardDTO.getInterestRate());
+
+        return creditCardRepository.save(creditCard);
+
+    }
+    public Boolean existsAccount(Long id) {
+
+        return accountRepository.existsById(id);
+    }
+    public void updateBalance(NewBalanceDTO newBalanceDTO, Long id) {
+        if(!existsAccount(id))
+            throw new ResponseStatusException(BAD_REQUEST, "Account id not found");
+
+        Account account = accountRepository.findById(id).get();
+        account.setBalance(new Money(newBalanceDTO.getBalance()));
+        accountRepository.save(account);
+
+    }
+
+    //money transfer method??
 }

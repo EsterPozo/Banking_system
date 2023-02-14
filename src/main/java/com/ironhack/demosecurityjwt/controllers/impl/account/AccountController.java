@@ -6,10 +6,12 @@ import com.ironhack.demosecurityjwt.dtos.account.NewBalanceDTO;
 import com.ironhack.demosecurityjwt.dtos.account.SavingsDTO;
 import com.ironhack.demosecurityjwt.models.account.Account;
 import com.ironhack.demosecurityjwt.models.account.Savings;
+import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.services.impl.account.AccountService;
 import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +34,12 @@ public class AccountController {
         return accountService.getAccountById(id);
     }
 
-    //get account with customerdetails (auth)
+    //get account with customerdetails (auth) - something missing
+    @GetMapping("/accounts/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Account getAccount(@AuthenticationPrincipal User user, @PathVariable Long id) {
+        return accountService.getAccountByIdWithAuth(user, id);
+    }
 
     @GetMapping("/bank/users/owners/{id}/accounts")
     @ResponseStatus(HttpStatus.OK)

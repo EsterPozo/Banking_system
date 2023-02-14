@@ -7,10 +7,15 @@ import com.ironhack.demosecurityjwt.dtos.account.SavingsDTO;
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.*;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
+import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.repositories.account.*;
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
+import com.ironhack.demosecurityjwt.services.impl.user.UserService;
+import com.ironhack.demosecurityjwt.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,8 +24,7 @@ import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.*;
 
 @Service
 public class AccountService {
@@ -38,6 +42,9 @@ public class AccountService {
     @Autowired
     private CreditCardRepository creditCardRepository;
 
+    @Autowired
+    private AuthService authService;
+
     public List<Account> getAccounts() {
         return accountRepository.findAll();
     }
@@ -49,6 +56,22 @@ public class AccountService {
     }
 
     //public Account getAccountByIdWithAuth()
+    public Account getAccountByIdWithAuth(User user, Long id) {
+        if (!accountRepository.existsById(id))
+            throw new ResponseStatusException(NOT_FOUND, "Account id not found");
+
+        //authorize access
+        if (!authService.authAccountAccess(user,id))
+            throw new ResponseStatusException(UNAUTHORIZED, "Access denied");
+
+        //get the account
+        Account account = accountRepository.findById(id).get();
+
+        // apply interest
+        // update last time accessed
+
+        return accountRepository.save(account);
+    }
 
     public List<Account> getAccountsByOwner(Long idOwner) {
         if (!accountHolderRepository.existsById(idOwner))

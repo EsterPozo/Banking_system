@@ -1,4 +1,4 @@
-package com.ironhack.demosecurityjwt.controllers.impl;
+package com.ironhack.demosecurityjwt.controllers.impl.user;
 
 import com.ironhack.demosecurityjwt.dtos.user.RoleToUserDTO;
 import com.ironhack.demosecurityjwt.controllers.interfaces.RoleControllerInterface;

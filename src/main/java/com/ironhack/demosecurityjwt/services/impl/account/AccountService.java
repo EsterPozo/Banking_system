@@ -107,7 +107,7 @@ public class AccountService {
 
     }
 
-    public Account AddSavings(SavingsDTO savingsDTO, Long id, Optional<Long> otherId) {
+    public Account addSavings(SavingsDTO savingsDTO, Long id, Optional<Long> otherId) {
         if (!accountHolderRepository.existsById(id) || (otherId.isPresent() && !accountHolderRepository.existsById(otherId.get()))) {
             throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
         }
@@ -134,7 +134,7 @@ public class AccountService {
 
     }
 
-    public Account AddCreditCard(CreditCardDTO creditCardDTO, Long id, Optional<Long> otherId) {
+    public Account addCreditCard(CreditCardDTO creditCardDTO, Long id, Optional<Long> otherId) {
         if (!accountHolderRepository.existsById(id) || (otherId.isPresent() && !accountHolderRepository.existsById(otherId.get()))) {
             throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
         }

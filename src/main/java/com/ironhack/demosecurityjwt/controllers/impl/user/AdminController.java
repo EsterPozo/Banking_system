@@ -1,4 +1,4 @@
-package com.ironhack.demosecurityjwt.controllers.impl;
+package com.ironhack.demosecurityjwt.controllers.impl.user;
 
 import com.ironhack.demosecurityjwt.dtos.user.UserDTO;
 import com.ironhack.demosecurityjwt.models.user.Admin;

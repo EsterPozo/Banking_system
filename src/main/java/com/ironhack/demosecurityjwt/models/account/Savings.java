@@ -4,9 +4,12 @@ import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Entity
 public class Savings extends Account{
@@ -60,8 +63,8 @@ public class Savings extends Account{
 
     public void setInterestRate(BigDecimal interestRate) {
         if (interestRate.compareTo(BigDecimal.valueOf(0.5)) > 0) {
-            throw new IllegalArgumentException("Interest rate can't be bigger than 0.5");
-        }
+            throw new ResponseStatusException(BAD_REQUEST,"Interest rate can't be bigger than 0.5" );
+                    }
         this.interestRate = interestRate;
     }
 
@@ -79,7 +82,8 @@ public class Savings extends Account{
 
     public void setMinimumBalance(Money minimumBalance) {
         if(minimumBalance.getAmount().compareTo(BigDecimal.valueOf(100)) < 0 ) {
-            throw new IllegalArgumentException("Minimum balance can't be lower than 100");
+            throw new ResponseStatusException(BAD_REQUEST,"Minimum balance can't be lower than 100");
+
         }
         this.minimumBalance = minimumBalance;
     }

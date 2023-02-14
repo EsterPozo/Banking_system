@@ -6,9 +6,12 @@ import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.enums.Status;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
 import jakarta.persistence.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 
 @Entity
@@ -74,6 +77,8 @@ public class Checking extends Account {
     }
 
     public void setMonthlyMaintenanceFee(Money monthlyMaintenanceFee) {
+//        if (monthlyMaintenanceFee.getAmount().compareTo(BigDecimal.valueOf(12)) <0)
+//            throw new ResponseStatusException(BAD_REQUEST, "Monthly maintenance fee can't be less than 12");
         this.monthlyMaintenanceFee = monthlyMaintenanceFee;
     }
 
@@ -86,6 +91,9 @@ public class Checking extends Account {
     }
 
     public void setMinimumBalance(Money minimumBalance) {
+        if (minimumBalance.getAmount().compareTo(BigDecimal.valueOf(250)) < 0)
+            throw new ResponseStatusException(BAD_REQUEST, "Min. balance can't be less than 250");
+
         this.minimumBalance = minimumBalance;
     }
 

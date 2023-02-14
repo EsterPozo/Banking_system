@@ -124,6 +124,7 @@ public class AccountService {
             checking.setPrimaryOwner(owner);
             checking.setSecondaryOwner(otherOwner);
             checking.setBalance(new Money(accountDTO.getBalance()));
+            checking.setMinimumBalance(new Money(accountDTO.getMinBalance()));
             checking.setSecretKey(accountDTO.getSecretKey());
 
             return checkingRepository.save(checking);

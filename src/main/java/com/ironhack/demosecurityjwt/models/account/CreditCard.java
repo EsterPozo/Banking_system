@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -17,9 +19,16 @@ public class CreditCard extends Account {
     private Money creditLimit;
     private BigDecimal interestRate;
 
+    private LocalDateTime interestAddedDateTime;
+
     public CreditCard() {
         setCreditLimit(DEFAULT_CREDIT_LIMIT);
         setInterestRate(DEFAULT_INTEREST_RATE);
+    }
+
+    @Override
+    public Money getMinimumBalance() {
+        return null;
     }
 
     //both constructors should be together??
@@ -49,10 +58,41 @@ public class CreditCard extends Account {
         return interestRate;
     }
 
+    public LocalDateTime getInterestAddedDateTime() {
+        return interestAddedDateTime;
+    }
+
+    public void setInterestAddedDateTime(LocalDateTime interestAddedDateTime) {
+        this.interestAddedDateTime = interestAddedDateTime;
+    }
+
     public void setInterestRate(BigDecimal interestRate) {
         if (interestRate.compareTo(BigDecimal.valueOf(0.2)) < 0 || interestRate.compareTo(BigDecimal.valueOf(0.1)) > 0  )
             throw new ResponseStatusException(BAD_REQUEST,"interest rate can't be lower than 0.1");
 
         this.interestRate = interestRate;
     }
+
+    public Integer getYearsSinceLastInterestAdded() {
+        long years = ChronoUnit.YEARS.between(getInterestAddedDateTime(), LocalDateTime.now());
+        return (int) years;
+    }
+    public BigDecimal getAnnualInterestRate() {
+        return getInterestRate();
+    }
+
+
+    public Money getLastInterestGenerated() {
+        BigDecimal earnedInterests = BigDecimal.ZERO;
+        BigDecimal interest = getAnnualInterestRate();
+        for(int i=0; i<getYearsSinceLastInterestAdded(); i++) {
+            earnedInterests = earnedInterests.add((getBalance().getAmount()).multiply(interest));
+        }
+        return new Money(earnedInterests);
+    }
+
+    public void updateInterestAddedDateTime() {
+        setInterestAddedDateTime(LocalDateTime.now());
+    }
+
 }

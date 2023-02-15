@@ -88,4 +88,10 @@ public abstract class Account {
     public void setPrimaryOwner(AccountHolder primaryOwner) {
         this.primaryOwner = primaryOwner;
     }
+
+    public abstract Money getMinimumBalance();
+
+    public Money getPenaltyFee() {
+        return PENALTY_FEE;
+    }
 }

@@ -1,5 +1,6 @@
 package com.ironhack.demosecurityjwt.models.account;
 
+import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.enums.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -25,6 +26,11 @@ public class StudentChecking extends Account{
     public StudentChecking() {
         setCreationDate(LocalDateTime.now());
         setStatus(Status.ACTIVE);
+    }
+
+    @Override
+    public Money getMinimumBalance() {
+        return null;
     }
 
     public LocalDateTime getCreationDate() {

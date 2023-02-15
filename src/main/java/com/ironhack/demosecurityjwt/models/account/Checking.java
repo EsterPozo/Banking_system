@@ -6,10 +6,12 @@ import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.enums.Status;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -48,24 +50,37 @@ public class Checking extends Account {
     })
     private Money monthlyMaintenanceFee;
 
-
+    private LocalDateTime monthlyFeeAppliedDateTime;
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
+    @CreationTimestamp
     private LocalDateTime creationDate;
 
     public Checking() {
         setMinimumBalance(MINIMUM_BALANCE);
         setMonthlyMaintenanceFee(MONTHLY_MAINTENANCE_FEE);
         setStatus(Status.ACTIVE);
-
+        setMonthlyFeeAppliedDateTime(getCreationDate());
         setCreationDate(LocalDateTime.now());
 
     }
 
     public Checking(Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         super( id, balance, primaryOwner, secondaryOwner);
+        setMinimumBalance(MINIMUM_BALANCE);
+        setMonthlyMaintenanceFee(MONTHLY_MAINTENANCE_FEE);
+        setStatus(Status.ACTIVE);
+        setMonthlyFeeAppliedDateTime(getCreationDate());
+        setCreationDate(LocalDateTime.now());
+    }
+
+    public LocalDateTime getMonthlyFeeAppliedDateTime() {
+        return monthlyFeeAppliedDateTime;
+    }
+
+    public void setMonthlyFeeAppliedDateTime(LocalDateTime monthlyFeeAppliedDateTime) {
+        this.monthlyFeeAppliedDateTime = monthlyFeeAppliedDateTime;
     }
 
     public String getSecretKey() {
@@ -111,6 +126,15 @@ public class Checking extends Account {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Integer getMonthsSinceLastMonthlyFeeDeduction() {
+        long months = ChronoUnit.MONTHS.between(getMonthlyFeeAppliedDateTime(), LocalDateTime.now());
+        return (int) months;
+    }
+
+    public void updateMonthlyFeeAppliedDateTime() {
+        setMonthlyFeeAppliedDateTime(LocalDateTime.now());
     }
 
 

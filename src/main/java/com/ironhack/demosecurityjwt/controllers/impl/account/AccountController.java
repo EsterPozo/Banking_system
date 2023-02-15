@@ -5,10 +5,12 @@ import com.ironhack.demosecurityjwt.models.account.Account;
 import com.ironhack.demosecurityjwt.models.account.Savings;
 import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.services.impl.account.AccountService;
+import com.ironhack.demosecurityjwt.services.interfaces.IAccountService;
 import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.Optional;
 @RestController
 public class AccountController {
     @Autowired
-    private AccountService accountService;
+    private IAccountService accountService;
 
     @GetMapping("/bank/accounts")
     @ResponseStatus(HttpStatus.OK)
@@ -34,8 +36,8 @@ public class AccountController {
     //get account with customerdetails (auth) - something missing
     @GetMapping("/accounts/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Account getAccount(@AuthenticationPrincipal User user, @PathVariable Long id) {
-        return accountService.getAccountByIdWithAuth(user, id);
+    public Account getAccount(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
+        return accountService.getAccountByIdWithAuth(userDetails, id);
     }
 
     @GetMapping("/bank/users/owners/{id}/accounts")

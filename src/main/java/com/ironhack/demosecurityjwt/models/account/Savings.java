@@ -4,10 +4,12 @@ import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -21,8 +23,10 @@ public class Savings extends Account{
     private final static Money MINIMUM_BALANCE = new Money(BigDecimal.valueOf(1000L));
 
     private BigDecimal interestRate;
+    @CreationTimestamp
     private LocalDateTime creationDate;
     private String secretKey;
+    private LocalDateTime interestAddedDateTime;
 
 
 
@@ -59,6 +63,14 @@ public class Savings extends Account{
 
     public BigDecimal getInterestRate() {
         return interestRate;
+    }
+
+    public LocalDateTime getInterestAddedDateTime() {
+        return interestAddedDateTime;
+    }
+
+    public void setInterestAddedDateTime(LocalDateTime interestAddedDateTime) {
+        this.interestAddedDateTime = interestAddedDateTime;
     }
 
     public void setInterestRate(BigDecimal interestRate) {
@@ -103,4 +115,27 @@ public class Savings extends Account{
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
     }
+
+    public Integer getYearsSinceLastInterestAdded() {
+        long years = ChronoUnit.YEARS.between(getInterestAddedDateTime(), LocalDateTime.now());
+        return (int) years;
+    }
+    public BigDecimal getAnnualInterestRate() {
+        return getInterestRate();
+    }
+
+
+    public Money getLastInterestGenerated() {
+        BigDecimal earnedInterests = BigDecimal.ZERO;
+        BigDecimal interest = getAnnualInterestRate();
+        for(int i=0; i<getYearsSinceLastInterestAdded(); i++) {
+            earnedInterests = earnedInterests.add((getBalance().getAmount()).multiply(interest));
+        }
+        return new Money(earnedInterests);
+    }
+
+    public void updateInterestAddedDateTime() {
+        setInterestAddedDateTime(LocalDateTime.now());
+    }
+
 }

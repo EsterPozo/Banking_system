@@ -2,6 +2,7 @@ package com.ironhack.demosecurityjwt.models.account;
 
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.enums.Status;
+import com.ironhack.demosecurityjwt.models.user.AccountHolder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
@@ -47,7 +48,16 @@ public class Savings extends Account{
         setCreationDate(LocalDateTime.now());
     }
 
-//    public Savings(BigDecimal interestRate) {
+    public Savings(Money balance, AccountHolder primaryOwner, String secretKey) {
+        super(balance, primaryOwner);
+        this.secretKey = secretKey;
+        setInterestRate(DEFAULT_INTEREST_RATE);
+        setMinimumBalance(MINIMUM_BALANCE);
+        setStatus(Status.ACTIVE);
+        setCreationDate(LocalDateTime.now());
+    }
+
+    //    public Savings(BigDecimal interestRate) {
 //        setInterestRate(interestRate);
 //        setMinimumBalance(MINIMUM_BALANCE);
 //        setStatus(Status.ACTIVE);

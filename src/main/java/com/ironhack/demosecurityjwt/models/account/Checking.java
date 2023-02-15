@@ -75,6 +75,11 @@ public class Checking extends Account {
         setCreationDate(LocalDateTime.now());
     }
 
+    public Checking(Money balance, AccountHolder primaryOwner, String secretKey) {
+        super(balance, primaryOwner);
+        this.secretKey = secretKey;
+    }
+
     public LocalDateTime getMonthlyFeeAppliedDateTime() {
         return monthlyFeeAppliedDateTime;
     }

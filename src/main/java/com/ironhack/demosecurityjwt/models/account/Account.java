@@ -57,6 +57,17 @@ public abstract class Account {
         this.secondaryOwner = secondaryOwner;
     }
 
+    public Account(Money balance, AccountHolder primaryOwner) {
+        this.balance = balance;
+        this.primaryOwner = primaryOwner;
+    }
+
+    public Account(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+        this.balance = balance;
+        this.primaryOwner = primaryOwner;
+        this.secondaryOwner = secondaryOwner;
+    }
+
     public Long getId() {
         return id;
     }

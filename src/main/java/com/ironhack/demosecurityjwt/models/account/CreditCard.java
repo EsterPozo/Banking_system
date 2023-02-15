@@ -1,6 +1,7 @@
 package com.ironhack.demosecurityjwt.models.account;
 
 import com.ironhack.demosecurityjwt.models.Money;
+import com.ironhack.demosecurityjwt.models.user.AccountHolder;
 import jakarta.persistence.Entity;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -40,6 +41,12 @@ public class CreditCard extends Account {
     public CreditCard(BigDecimal interestRate) {
         setCreditLimit(DEFAULT_CREDIT_LIMIT);
         setInterestRate(interestRate);
+    }
+
+    public CreditCard(Money balance, AccountHolder primaryOwner) {
+        super(balance, primaryOwner);
+        setCreditLimit(DEFAULT_CREDIT_LIMIT);
+        setInterestRate(DEFAULT_INTEREST_RATE);
     }
 
     public Money getCreditLimit() {

@@ -48,4 +48,7 @@ public class User {
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
+    public User(String name) {
+        this.name = name;
+    }
 }

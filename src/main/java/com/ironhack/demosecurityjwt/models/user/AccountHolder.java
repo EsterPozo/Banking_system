@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Optional;
 
 @Entity
@@ -38,12 +39,20 @@ public class AccountHolder extends User {
         this.getRoles().add(new Role("ROLE_ACCOUNT_HOLDER"));
     }
 
-    public AccountHolder( LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress ) {
-
+    public AccountHolder( String name,LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress ) {
+        super(name);
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
     }
+    public AccountHolder(String name, LocalDate dateOfBirth, Address primaryAddress) {
+        super(name);
+        this.dateOfBirth = dateOfBirth;
+        this.primaryAddress = primaryAddress;
+    }
+
+
+
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;

@@ -14,6 +14,8 @@ public class TransactionDTO {
 
     private String secretKey;
 
+    private String hashedKey;
+
     public Long getToAccountId() {
         return toAccountId;
     }
@@ -24,6 +26,14 @@ public class TransactionDTO {
 
     public Long getFromAccountId() {
         return fromAccountId;
+    }
+
+    public String getHashedKey() {
+        return hashedKey;
+    }
+
+    public void setHashedKey(String hashedKey) {
+        this.hashedKey = hashedKey;
     }
 
     public void setFromAccountId(Long fromAccountId) {

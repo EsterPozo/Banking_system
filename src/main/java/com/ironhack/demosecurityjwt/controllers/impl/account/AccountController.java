@@ -1,10 +1,12 @@
 package com.ironhack.demosecurityjwt.controllers.impl.account;
 
 import com.ironhack.demosecurityjwt.dtos.account.*;
+import com.ironhack.demosecurityjwt.dtos.transaction.TransactionDTO;
 import com.ironhack.demosecurityjwt.models.account.Account;
 import com.ironhack.demosecurityjwt.models.account.Savings;
 import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.services.impl.account.AccountService;
+import com.ironhack.demosecurityjwt.services.impl.account.AuthService;
 import com.ironhack.demosecurityjwt.services.interfaces.IAccountService;
 import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ import java.util.Optional;
 public class AccountController {
     @Autowired
     private IAccountService accountService;
+
+    @Autowired
+    private AuthService authService;
 
     @GetMapping("/bank/accounts")
     @ResponseStatus(HttpStatus.OK)
@@ -66,9 +71,17 @@ public class AccountController {
 
     @PatchMapping("/bank/accounts/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateBalance(NewBalanceDTO newBalanceDTO, Long id) {
+    public void updateBalance(@RequestBody NewBalanceDTO newBalanceDTO,@PathVariable Long id) {
         accountService.updateBalance(newBalanceDTO,id);
     }
 
-    //transferMoney pending
+    @PostMapping("/accounts/transfer")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Account transferMoney(@AuthenticationPrincipal UserDetails userDetails,@RequestBody TransactionDTO transactionDTO) {
+        authService.authMoneyTransfer(userDetails, transactionDTO);
+        return accountService.startMoneyTransfer(userDetails, transactionDTO);
+    }
+
+
 }
+

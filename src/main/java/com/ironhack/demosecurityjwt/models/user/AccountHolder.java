@@ -38,7 +38,8 @@ public class AccountHolder extends User {
         this.getRoles().add(new Role("ROLE_ACCOUNT_HOLDER"));
     }
 
-    public AccountHolder(LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress ) {
+    public AccountHolder( LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress ) {
+
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;

@@ -119,9 +119,10 @@ public class InterestFeesServiceTest {
         Savings savingsAccount = (Savings) accountList.get(2);
         CreditCard creditCardAccount = (CreditCard) accountList.get(3);
 
-        //assertEquals(BigDecimal.valueOf(1000 - checkingAccount.getMonthlyMaintenanceFee().getAmount().intValue()).longValueExact(),
-                checkingAccount.getBalance().getAmount().longValueExact();
-       // assertEquals(BigDecimal.valueOf(1000).longValueExact(), studentCheckingAccount.getBalance().getAmount().longValueExact());
+//not working because addtransaction is not working
+//        assertEquals(BigDecimal.valueOf(1000 - checkingAccount.getMonthlyMaintenanceFee().getAmount().intValue()).longValueExact(),
+//                checkingAccount.getBalance().getAmount().longValueExact());
+        //assertEquals(BigDecimal.valueOf(1000).longValueExact(), studentCheckingAccount.getBalance().getAmount().longValueExact());
        // assertTrue(BigDecimal.valueOf(1000).compareTo(creditCardAccount.getBalance().getAmount()) < 0);
        // assertEquals(BigDecimal.valueOf(1002.5).setScale(2), savingsAccount.getBalance().getAmount());
     }

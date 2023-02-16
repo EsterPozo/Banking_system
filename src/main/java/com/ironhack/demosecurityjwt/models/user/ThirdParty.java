@@ -12,13 +12,13 @@ public class ThirdParty extends User {
 
     public ThirdParty(String hashedKey) {
         this.hashedKey = hashedKey;
-        this.getRoles().add(new Role("ROLE_THIRD_PARTY"));
+      // this.getRoles().add(new Role("ROLE_THIRD_PARTY"));
     }
 
     public ThirdParty(String name, String hashedKey) {
         super(name);
         this.hashedKey = hashedKey;
-        this.getRoles().add(new Role("ROLE_THIRD_PARTY"));
+       // this.getRoles().add(new Role("ROLE_THIRD_PARTY"));
 
     }
 

@@ -1,5 +1,6 @@
 package com.ironhack.demosecurityjwt.services.impl.transaction;
 
+import com.ironhack.demosecurityjwt.dtos.account.NewBalanceDTO;
 import com.ironhack.demosecurityjwt.dtos.transaction.TransactionDTO;
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.Account;
@@ -59,6 +60,18 @@ public class MoneyTransferService implements IMoneyTransferService {
         transaction.setToAccount(destination);
         transaction.setAuthorName(transactionDTO.getName());
         transaction.setDescription(transactionDTO.getDescription());
+        //ACTUAL TRANSACTION!!!!
+
+//        NewBalanceDTO newBalanceO = new NewBalanceDTO();
+//        newBalanceO.setBalance(origin.getBalance().getAmount().subtract(transferAmount));
+//        accountService.updateBalance(newBalanceO,origin.getId());
+//
+//        NewBalanceDTO newBalanceD = new NewBalanceDTO();
+//        newBalanceD.setBalance(destination.getBalance().getAmount().add(transferAmount));
+//        accountService.updateBalance(newBalanceD,destination.getId());
+//
+
+        //check if works above
         transactionService.addTransaction(transaction);
 
         //make penalty fee transaction

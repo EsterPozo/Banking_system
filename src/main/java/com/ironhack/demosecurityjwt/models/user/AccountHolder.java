@@ -1,12 +1,18 @@
 package com.ironhack.demosecurityjwt.models.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.ironhack.demosecurityjwt.models.account.Account;
 import com.ironhack.demosecurityjwt.repositories.user.RoleRepository;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Entity
@@ -40,6 +46,17 @@ public class AccountHolder extends User {
     })
     private Address mailingAddress;
 
+    // link the primaryaccounts of the ah and the secondaries
+    @JsonBackReference
+    @OneToMany(mappedBy = "primaryOwner", fetch = FetchType.EAGER/*, orphanRemoval = true*/)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Account> primaryAccounts;
+    @JsonBackReference
+    @OneToMany(mappedBy = "secondaryOwner", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Account> secondaryAccounts;
+
+
     public AccountHolder() {
        // Role role = roleRepository.save(new Role("ROLE_ACCOUNT_HOLDER"));
 //        Role role = roleRepository.findByName("ROLE_ACCOUNT_HOLDER");
@@ -64,8 +81,21 @@ public class AccountHolder extends User {
 //        this.getRoles().add(role);
     }
 
+    public List<Account> getPrimaryAccounts() {
+        return primaryAccounts;
+    }
 
+    public void setPrimaryAccounts(List<Account> primaryAccounts) {
+        this.primaryAccounts = primaryAccounts;
+    }
 
+    public List<Account> getSecondaryAccounts() {
+        return secondaryAccounts;
+    }
+
+    public void setSecondaryAccounts(List<Account> secondaryAccounts) {
+        this.secondaryAccounts = secondaryAccounts;
+    }
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
@@ -90,4 +120,6 @@ public class AccountHolder extends User {
     public void setMailingAddress(Address mailingAddress) {
         this.mailingAddress = mailingAddress;
     }
+
+
 }

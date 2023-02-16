@@ -12,6 +12,7 @@ import com.ironhack.demosecurityjwt.services.interfaces.IAccountService;
 import com.ironhack.demosecurityjwt.services.interfaces.ITransactionService;
 import com.ironhack.demosecurityjwt.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.ParameterResolutionDelegate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,9 @@ public class TransactionService implements ITransactionService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private MoneyTransferService moneyTransferService;
+
     public List<Transaction> getTransactions() {
         return transactionRepository.findAll();
     }
@@ -60,6 +64,8 @@ public class TransactionService implements ITransactionService {
             accountRepository.save(transaction.getFromAccount());
         if(transaction.getToAccount() != null)
             accountRepository.save(transaction.getToAccount());
+
+
         return newTransaction;
     }
 

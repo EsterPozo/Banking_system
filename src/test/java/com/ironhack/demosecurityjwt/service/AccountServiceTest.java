@@ -79,8 +79,8 @@ public class AccountServiceTest {
                 "Alba Pou",
                 LocalDate.of(1990, 4, 14),
                 new Address("Calle Pizarro 1", "Barcelona", "08201"));
-        accountHolder.setUsername("username2");
-        accountHolder.setPassword("password");
+        accountHolder2.setUsername("username2");
+        accountHolder2.setPassword("password");
 
 //        ThirdParty thirdPartyUser = new ThirdParty("Google", "elgooG");
 //        thirdPartyUser.setUsername("username2");

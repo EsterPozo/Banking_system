@@ -157,10 +157,32 @@ public class AccountServiceTest {
         System.out.println("This is owner sec " + checkingAccountDTO.getSecretKey());
         accountService.addChecking(checkingAccountDTO);
 
+        List<Account> accounts = accountRepository.findByPrimaryOwner(primaryOwner);
+        assertEquals(1, accounts.size());
+       assertEquals("secretkey", ((Checking)accounts.get(accounts.size()-1)).getSecretKey());
+    }
+
+    @Test
+    void addChecking_ownerUnder24() {
+        AccountHolder owner = new AccountHolder(
+                "Jaime Lopez",
+                LocalDate.of(2005, 5, 6),
+                new Address("Calle Dos", "Madrid", "28080"));
+        AccountHolder primaryOwner = accountHolderRepository.save(owner);
+
+        AccountDTO checkingAccountDTO = new AccountDTO();
+        checkingAccountDTO.setBalance(BigDecimal.ZERO);
+        checkingAccountDTO.setSecretKey("secretkey");
+        checkingAccountDTO.setOwnerId(accountHolderRepository.findByName("Jaime Lopez").getId());
+
+        accountService.addChecking(checkingAccountDTO);
+
         //List<Account> accounts = accountRepository.findByPrimaryOwnerName("Pedro Perez");
         List<Account> accounts = accountRepository.findByPrimaryOwner(primaryOwner);
         assertEquals(1, accounts.size());
-       // assertEquals("secretkey", ((Checking)accounts.get(accounts.size()-1)).getSecretKey());
+        assertEquals("secretkey", ((StudentChecking)accounts.get(accounts.size()-1)).getSecretKey());
+        assertTrue(accounts.get(0) instanceof StudentChecking);
+
     }
 
 }

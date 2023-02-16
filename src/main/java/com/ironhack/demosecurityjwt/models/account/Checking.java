@@ -78,6 +78,11 @@ public class Checking extends Account {
     public Checking(Money balance, AccountHolder primaryOwner, String secretKey) {
         super(balance, primaryOwner);
         this.secretKey = secretKey;
+        setMinimumBalance(MINIMUM_BALANCE);
+        setMonthlyMaintenanceFee(MONTHLY_MAINTENANCE_FEE);
+        setStatus(Status.ACTIVE);
+        setMonthlyFeeAppliedDateTime(getCreationDate());
+        setCreationDate(LocalDateTime.now());
     }
 
     public LocalDateTime getMonthlyFeeAppliedDateTime() {

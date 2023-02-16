@@ -3,6 +3,8 @@ package com.ironhack.demosecurityjwt.services.impl.transaction;
 import com.ironhack.demosecurityjwt.dtos.transaction.TransactionDTO;
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.Account;
+import com.ironhack.demosecurityjwt.models.account.Checking;
+import com.ironhack.demosecurityjwt.models.account.Savings;
 import com.ironhack.demosecurityjwt.models.transaction.Transaction;
 import com.ironhack.demosecurityjwt.models.transaction.enums.TransType;
 import com.ironhack.demosecurityjwt.repositories.account.AccountRepository;
@@ -46,8 +48,10 @@ public class MoneyTransferService implements IMoneyTransferService {
 
         //check if penalty fee has to be deduced later
         BigDecimal result = currentBalance.subtract(transferAmount);
-        boolean applyPenaltyFee = currentBalance.compareTo(origin.getMinimumBalance().getAmount()) >0 && result.compareTo(origin.getMinimumBalance().getAmount()) < 0;
-
+        boolean applyPenaltyFee = false;
+        if(origin instanceof Checking || origin instanceof Savings) {
+          applyPenaltyFee = currentBalance.compareTo(origin.getMinimumBalance().getAmount()) > 0 && result.compareTo(origin.getMinimumBalance().getAmount()) < 0;
+        }
         // make transaction
         Transaction transaction = new Transaction(new Money(transferAmount));
         transaction.setTransType(TransType.MONEY_TRANSFER);

@@ -2,11 +2,14 @@ package com.ironhack.demosecurityjwt.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.demosecurityjwt.dtos.account.AccountDTO;
+import com.ironhack.demosecurityjwt.dtos.account.NewBalanceDTO;
+import com.ironhack.demosecurityjwt.dtos.transaction.TransactionDTO;
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.*;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
 import com.ironhack.demosecurityjwt.models.user.Address;
 import com.ironhack.demosecurityjwt.models.user.ThirdParty;
+import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.repositories.account.*;
 import com.ironhack.demosecurityjwt.repositories.transaction.TransactionRepository;
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
@@ -18,11 +21,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -57,6 +62,8 @@ public class AccountServiceTest {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
@@ -72,7 +79,7 @@ public class AccountServiceTest {
                 "Alba Pou",
                 LocalDate.of(1990, 4, 14),
                 new Address("Calle Pizarro 1", "Barcelona", "08201"));
-        accountHolder.setUsername("username1");
+        accountHolder.setUsername("username2");
         accountHolder.setPassword("password");
 
 //        ThirdParty thirdPartyUser = new ThirdParty("Google", "elgooG");
@@ -84,7 +91,7 @@ public class AccountServiceTest {
 //       // thirdPartyRepository.save(thirdPartyUser);
 //
         Checking checkingAccount = new Checking(new Money(BigDecimal.valueOf(1000L)),accountHolder,  "1234");
-        StudentChecking studentCheckingAccount = new StudentChecking(new Money(BigDecimal.valueOf(1000L)),accountHolder,  "4321");
+        StudentChecking studentCheckingAccount = new StudentChecking(new Money(BigDecimal.valueOf(1200L)),accountHolder,  "4321");
        Savings savingsAccount = new Savings( new Money(BigDecimal.valueOf(1000L)), accountHolder, "1234");
         CreditCard creditCardAccount = new CreditCard(new Money(BigDecimal.valueOf(1000L)), accountHolder);
 
@@ -246,6 +253,46 @@ public class AccountServiceTest {
         assertEquals(new BigDecimal("2121.00"), ((CreditCard)moreAccounts.get(0)).getCreditLimit().getAmount());
         assertEquals(secondaryOwner.getName(), accounts.get(accounts.size()-1).getSecondaryOwner().getName());
 
+    }
+
+    @Test
+    void updateBalance() {
+        NewBalanceDTO newBalanceDTO = new NewBalanceDTO();
+        newBalanceDTO.setBalance(BigDecimal.valueOf(12345.67));
+
+        accountService.updateBalance(newBalanceDTO, accountService.getAccounts().get(0).getId());
+        assertEquals(BigDecimal.valueOf(12345.67), accountService.getAccounts().get(0).getBalance().getAmount());
+
+    }
+
+    @Test
+    void startMoneyTransfer() {
+
+        Account origin = accountRepository.findByPrimaryOwner(accountHolderRepository.findAll().get(0)).get(0);
+        Long originId = origin.getId();
+        Account destination = accountRepository.findByPrimaryOwner(accountHolderRepository.findAll().get(0)).get(1);
+        Long destinationId = destination.getId();
+
+        BigDecimal amount = BigDecimal.valueOf(90L);
+        TransactionDTO moneyTransferDTO = new TransactionDTO();
+        moneyTransferDTO.setAmount(amount);
+        moneyTransferDTO.setName("Alejandro Martinez");
+        moneyTransferDTO.setDescription("money transfer test");
+        moneyTransferDTO.setToAccountId(destinationId);
+        moneyTransferDTO.setFromAccountId(originId);
+
+        AccountHolder ac = accountHolderRepository.findByName("Alejandro Martinez");
+        UserDetails userDetails = (UserDetails) ac;
+
+        System.out.println("user detals username" + userDetails.getUsername());
+
+        accountService.startMoneyTransfer(userDetails, moneyTransferDTO);
+
+       origin = accountRepository.findByPrimaryOwner(accountHolderRepository.findAll().get(0)).get(0);
+       destination = accountRepository.findByPrimaryOwner(accountHolderRepository.findAll().get(0)).get(1);
+
+        BigDecimal diff = destination.getBalance().getAmount().subtract(origin.getBalance().getAmount()).abs();
+        assertEquals(BigDecimal.valueOf(200L).setScale(2, RoundingMode.HALF_EVEN), diff);
     }
 
 }

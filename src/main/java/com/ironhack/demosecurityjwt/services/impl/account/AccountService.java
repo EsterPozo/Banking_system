@@ -224,7 +224,10 @@ public class AccountService implements IAccountService {
 
         //check the person is he authenticated for this account?¿?
         String primaryName = account.getPrimaryOwner().getName();
-        String secondaryName = account.getSecondaryOwner().getName();
+        String secondaryName = new String();
+        if (account.getSecondaryOwner() != null) {
+            secondaryName = account.getSecondaryOwner().getName();
+        }
         String transferName = transactionDTO.getName();
         User user = userRepository.findByUsername(userDetails.getUsername());
         String authName = user.getName();

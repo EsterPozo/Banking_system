@@ -22,7 +22,7 @@ public class ThirdPartyService {
         thirdParty.setHashedKey(thirdPartyDTO.getHashedKey());
         thirdParty.setUsername(thirdParty.getUsername());
         thirdParty.setPassword(thirdParty.getPassword());
-        thirdParty.getRoles().add(new Role("ROLE_THIRD_party"));
+        //thirdParty.getRoles().add(new Role("ROLE_THIRD_party"));
 
         return thirdPartyRepository.save(thirdParty);
 

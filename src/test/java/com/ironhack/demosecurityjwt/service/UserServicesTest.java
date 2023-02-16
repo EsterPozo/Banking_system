@@ -2,13 +2,17 @@ package com.ironhack.demosecurityjwt.service;
 
 import com.ironhack.demosecurityjwt.dtos.account.AccountDTO;
 import com.ironhack.demosecurityjwt.dtos.user.AccountHolderDTO;
+import com.ironhack.demosecurityjwt.dtos.user.ThirdPartyDTO;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
 import com.ironhack.demosecurityjwt.models.user.Address;
 import com.ironhack.demosecurityjwt.models.user.ThirdParty;
+import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.repositories.account.AccountRepository;
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
 import com.ironhack.demosecurityjwt.repositories.user.ThirdPartyRepository;
+import com.ironhack.demosecurityjwt.repositories.user.UserRepository;
 import com.ironhack.demosecurityjwt.services.impl.user.AccountHolderService;
+import com.ironhack.demosecurityjwt.services.impl.user.ThirdPartyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,9 +36,14 @@ public class UserServicesTest {
     private ThirdPartyRepository thirdPartyRepository;
 
     @Autowired
+    private ThirdPartyService thirdPartyService;
+
+    @Autowired
     private AccountHolderService accountHolderService;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
@@ -91,6 +100,22 @@ public class UserServicesTest {
         List<AccountHolder> owners = accountHolderRepository.findAll();
         assertEquals(2, owners.size());
        assertEquals("Ana Fernández", owners.get(owners.size()-1).getName());
+    }
+
+    @Test
+    void addThirdPartyUser() {
+
+        ThirdPartyDTO thirdPartyUserDTO = new ThirdPartyDTO();
+        thirdPartyUserDTO.setName("Hello World");
+        thirdPartyUserDTO.setHashedKey("W0RLDH3LL0");
+        thirdPartyUserDTO.setUsername("username");
+        thirdPartyUserDTO.setPassword("password");
+
+        ThirdParty thirdPartyUser = thirdPartyService.addThirdParty(thirdPartyUserDTO);
+
+        List<User> owners = userRepository.findAll();
+        assertEquals(6, owners.size());
+        assertEquals("Hello World", owners.get(owners.size()-1).getName());
     }
 
 }

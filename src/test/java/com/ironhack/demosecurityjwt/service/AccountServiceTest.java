@@ -68,12 +68,19 @@ public class AccountServiceTest {
                 new Address("Calle Velázquez 1", "Gijón", "33201"));
         accountHolder.setUsername("username1");
         accountHolder.setPassword("password");
+        AccountHolder accountHolder2 = new AccountHolder(
+                "Alba Pou",
+                LocalDate.of(1990, 4, 14),
+                new Address("Calle Pizarro 1", "Barcelona", "08201"));
+        accountHolder.setUsername("username1");
+        accountHolder.setPassword("password");
 
 //        ThirdParty thirdPartyUser = new ThirdParty("Google", "elgooG");
 //        thirdPartyUser.setUsername("username2");
 //        thirdPartyUser.setPassword("password");
 
    accountHolderRepository.save(accountHolder);
+        accountHolderRepository.save(accountHolder2);
 //       // thirdPartyRepository.save(thirdPartyUser);
 //
         Checking checkingAccount = new Checking(new Money(BigDecimal.valueOf(1000L)),accountHolder,  "1234");
@@ -213,6 +220,31 @@ public class AccountServiceTest {
         assertEquals("keysecret", ((Savings)moreAccounts.get(0)).getSecretKey());
         assertEquals(secondaryOwner.getName(), accounts.get(accounts.size()-1).getSecondaryOwner().getName());
         assertEquals(primaryOwner.getName(), moreAccounts.get(0).getPrimaryOwner().getName());
+
+    }
+
+    @Test
+    void addCreditCard() {
+        AccountHolder primaryOwner = accountHolderRepository.findAll().get(1);
+        AccountHolder secondaryOwner = accountHolderRepository.findAll().get(0);
+
+        AccountDTO creditCardAccountDTO = new AccountDTO();
+        creditCardAccountDTO.setBalance(BigDecimal.valueOf(1234L));
+        creditCardAccountDTO.setInterestRate(BigDecimal.valueOf(0.125));
+        creditCardAccountDTO.setCreditLimit(BigDecimal.valueOf(2121));
+        creditCardAccountDTO.setOwnerId(primaryOwner.getId());
+        creditCardAccountDTO.setOtherOwnerId(secondaryOwner.getId());
+        accountService.addCreditCard(creditCardAccountDTO);
+
+        List<Account> accounts = accountRepository.findByPrimaryOwner(primaryOwner);
+        List<Account> moreAccounts = accountRepository.findBySecondaryOwner(secondaryOwner);
+
+        assertEquals(1, accounts.size());
+        assertEquals(1, moreAccounts.size());
+
+        assertEquals(new BigDecimal("1234.00"), accounts.get(accounts.size()-1).getBalance().getAmount());
+        assertEquals(new BigDecimal("2121.00"), ((CreditCard)moreAccounts.get(0)).getCreditLimit().getAmount());
+        assertEquals(secondaryOwner.getName(), accounts.get(accounts.size()-1).getSecondaryOwner().getName());
 
     }
 

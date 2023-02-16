@@ -189,7 +189,9 @@ public class AccountService implements IAccountService {
         creditCard.setPrimaryOwner(owner);
         creditCard.setSecondaryOwner(otherOwner);
         creditCard.setBalance(new Money(accountDTO.getBalance()));
-        creditCard.setInterestRate(accountDTO.getInterestRate());
+        if (accountDTO.getInterestRate() != null) creditCard.setInterestRate(accountDTO.getInterestRate());
+
+        if(accountDTO.getCreditLimit() !=null) creditCard.setCreditLimit(new Money(accountDTO.getCreditLimit()));
 
         return creditCardRepository.save(creditCard);
 

@@ -50,6 +50,9 @@ public class BankingSystemApp /*implements CommandLineRunner*/ {
         return args -> {
             userService.saveRole(new Role(null, "ROLE_USER"));
             userService.saveRole(new Role(null, "ROLE_ADMIN"));
+            userService.saveRole(new Role(null, "ROLE_ACCOUNT_HOLDER"));
+            userService.saveRole(new Role(null, "ROLE_THIRD_PARTY"));
+
 
             userService.saveUser(new User(null, "John Doe", "john", "1234", new ArrayList<>()));
             userService.saveUser(new User(null, "James Smith", "james", "1234", new ArrayList<>()));
@@ -59,8 +62,8 @@ public class BankingSystemApp /*implements CommandLineRunner*/ {
             userService.addRoleToUser("john", "ROLE_USER");
             userService.addRoleToUser("james", "ROLE_ADMIN");
             userService.addRoleToUser("jane", "ROLE_USER");
-            userService.addRoleToUser("chris", "ROLE_ADMIN");
-            userService.addRoleToUser("chris", "ROLE_USER");
+            userService.addRoleToUser("chris", "ROLE_ACCOUNT_HOLDER");
+            userService.addRoleToUser("chris", "ROLE_THIRD_PARTY");
         };
     }
 

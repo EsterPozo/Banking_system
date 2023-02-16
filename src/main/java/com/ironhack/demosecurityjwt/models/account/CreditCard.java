@@ -54,7 +54,7 @@ public class CreditCard extends Account {
     }
 
     public void setCreditLimit(Money creditLimit) {
-        if(creditLimit.getAmount().compareTo(BigDecimal.valueOf(100)) > 0 || creditLimit.getAmount().compareTo(BigDecimal.valueOf(100000)) < 0 ) {
+        if(creditLimit.getAmount().compareTo(BigDecimal.valueOf(100)) < 0 || creditLimit.getAmount().compareTo(BigDecimal.valueOf(100000)) > 0 ) {
             throw new ResponseStatusException(BAD_REQUEST,"credit limit can't be higher than 100.000");
 
         }
@@ -74,7 +74,7 @@ public class CreditCard extends Account {
     }
 
     public void setInterestRate(BigDecimal interestRate) {
-        if (interestRate.compareTo(BigDecimal.valueOf(0.2)) < 0 || interestRate.compareTo(BigDecimal.valueOf(0.1)) > 0  )
+        if (interestRate.compareTo(BigDecimal.valueOf(0.2)) > 0 || interestRate.compareTo(BigDecimal.valueOf(0.1)) < 0  )
             throw new ResponseStatusException(BAD_REQUEST,"interest rate can't be lower than 0.1");
 
         this.interestRate = interestRate;

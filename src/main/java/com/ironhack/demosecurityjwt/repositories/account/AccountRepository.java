@@ -11,6 +11,8 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository <Account, Long> {
 
     List<Account> findByPrimaryOwner(AccountHolder owner);
+    List<Account> findByPrimaryOwnerName(String name);
+
     List<Account> findBySecondaryOwner(AccountHolder owner);
 
     List<Account> findByPrimaryOwnerOrSecondaryOwner(AccountHolder primaryOwner, AccountHolder secondaryOwner);

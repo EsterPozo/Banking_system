@@ -66,8 +66,8 @@ public class Checking extends Account {
 
     }
 
-    public Checking(Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
-        super( id, balance, primaryOwner, secondaryOwner);
+    public Checking(Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+        super(balance, primaryOwner, secondaryOwner);
         setMinimumBalance(MINIMUM_BALANCE);
         setMonthlyMaintenanceFee(MONTHLY_MAINTENANCE_FEE);
         setStatus(Status.ACTIVE);

@@ -114,11 +114,14 @@ public class AccountService implements IAccountService {
     }
 
     public Account addChecking(AccountDTO accountDTO) {
-        if (!accountHolderRepository.existsById(accountDTO.getOwnerId()) || !accountHolderRepository.existsById(accountDTO.getOtherOwnerId())) {
+        if (!accountHolderRepository.existsById(accountDTO.getOwnerId()) && !accountHolderRepository.existsById(accountDTO.getOtherOwnerId())) {
             throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
         }
             AccountHolder owner = accountHolderRepository.findById(accountDTO.getOwnerId()).get();
-            AccountHolder otherOwner = accountHolderRepository.findById(accountDTO.getOtherOwnerId()).get();
+          AccountHolder otherOwner = new AccountHolder();
+            if(accountDTO.getOtherOwnerId() != null) {
+                otherOwner = accountHolderRepository.findById(accountDTO.getOtherOwnerId()).get();
+            }
 
             LocalDate today = LocalDate.now();
             int age = owner.getDateOfBirth().until(today).getYears();
@@ -126,19 +129,24 @@ public class AccountService implements IAccountService {
             if (age < 24) {
                 StudentChecking studentChecking = new StudentChecking();
                 studentChecking.setPrimaryOwner(owner);
-                studentChecking.setSecondaryOwner(otherOwner);
                 studentChecking.setBalance(new Money(accountDTO.getBalance()));
                 studentChecking.setSecretKey(accountDTO.getSecretKey());
+                if(otherOwner.getId() != null) {
+                    studentChecking.setSecondaryOwner(otherOwner);
+                }
 
                 return studentCheckingRepository.save(studentChecking);
             }
 
             Checking checking = new Checking();
             checking.setPrimaryOwner(owner);
-            checking.setSecondaryOwner(otherOwner);
+
             checking.setBalance(new Money(accountDTO.getBalance()));
             checking.setMinimumBalance(new Money(accountDTO.getMinBalance()));
             checking.setSecretKey(accountDTO.getSecretKey());
+            if (otherOwner.getId() != null) {
+                checking.setSecondaryOwner(otherOwner);
+            }
 
             return checkingRepository.save(checking);
 

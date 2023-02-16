@@ -49,13 +49,13 @@ public abstract class Account {
     public Account() {
     }
 
-    public Account( Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
-
-        this.id = id;
-        this.balance = balance;
-        this.primaryOwner = primaryOwner;
-        this.secondaryOwner = secondaryOwner;
-    }
+//    public Account( Long id, Money balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
+//
+//        this.id = id;
+//        this.balance = balance;
+//        this.primaryOwner = primaryOwner;
+//        this.secondaryOwner = secondaryOwner;
+//    }
 
     public Account(Money balance, AccountHolder primaryOwner) {
         this.balance = balance;

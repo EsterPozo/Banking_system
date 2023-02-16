@@ -1,7 +1,9 @@
 package com.ironhack.demosecurityjwt.models.user;
 
+import com.ironhack.demosecurityjwt.repositories.user.RoleRepository;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -15,6 +17,9 @@ public class AccountHolder extends User {
 //    Date of birth
 //    A primaryAddress (which should be a separate address class)
 //    An optional mailingAddress
+
+//    @Autowired
+//   RoleRepository roleRepository;
 
     private LocalDate dateOfBirth;
 
@@ -36,7 +41,10 @@ public class AccountHolder extends User {
     private Address mailingAddress;
 
     public AccountHolder() {
-        this.getRoles().add(new Role("ROLE_ACCOUNT_HOLDER"));
+       // Role role = roleRepository.save(new Role("ROLE_ACCOUNT_HOLDER"));
+//        Role role = roleRepository.findByName("ROLE_ACCOUNT_HOLDER");
+//        this.getRoles().add(role);
+
     }
 
     public AccountHolder( String name,LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress ) {
@@ -44,11 +52,16 @@ public class AccountHolder extends User {
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
+        //findbyname role
+//        Role role = roleRepository.findByName("ROLE_ACCOUNT_HOLDER");
+//        this.getRoles().add(role);
     }
     public AccountHolder(String name, LocalDate dateOfBirth, Address primaryAddress) {
         super(name);
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
+//        Role role = roleRepository.findByName("ROLE_ACCOUNT_HOLDER");
+//        this.getRoles().add(role);
     }
 
 

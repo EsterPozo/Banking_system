@@ -5,6 +5,7 @@ import com.ironhack.demosecurityjwt.models.user.AccountHolder;
 import com.ironhack.demosecurityjwt.models.user.Address;
 import com.ironhack.demosecurityjwt.models.user.Role;
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
+import com.ironhack.demosecurityjwt.repositories.user.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ import java.util.Optional;
 public class AccountHolderService {
     @Autowired
     private AccountHolderRepository accountHolderRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     public List<AccountHolder> getOwners() {
         return accountHolderRepository.findAll();
@@ -37,8 +41,9 @@ public class AccountHolderService {
 
     accountHolder.setUsername(accountHolderDTO.getUsername());
     accountHolder.setPassword(accountHolderDTO.getPassword()); //need to be encrypted
-    accountHolder.getRoles().add(new Role("ROLE_ACCOUNT_HOLDER"));
-
+    //accountHolder.getRoles().add(new Role("ROLE_ACCOUNT_HOLDER"));
+        Role role = roleRepository.findByName("ROLE_ACCOUNT_HOLDER");
+        accountHolder.getRoles().add(role);
     return accountHolderRepository.save(accountHolder);
 
     }

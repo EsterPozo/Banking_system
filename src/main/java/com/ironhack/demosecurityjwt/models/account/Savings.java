@@ -45,7 +45,9 @@ public class Savings extends Account{
         setInterestRate(DEFAULT_INTEREST_RATE);
         setMinimumBalance(MINIMUM_BALANCE);
         setStatus(Status.ACTIVE);
+
         setCreationDate(LocalDateTime.now());
+        setInterestAddedDateTime(LocalDateTime.now());
     }
 
     public Savings(Money balance, AccountHolder primaryOwner, String secretKey) {
@@ -55,6 +57,7 @@ public class Savings extends Account{
         setMinimumBalance(MINIMUM_BALANCE);
         setStatus(Status.ACTIVE);
         setCreationDate(LocalDateTime.now());
+        setInterestAddedDateTime(LocalDateTime.now());
     }
 
     //    public Savings(BigDecimal interestRate) {

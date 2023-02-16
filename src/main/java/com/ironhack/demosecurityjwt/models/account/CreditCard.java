@@ -25,6 +25,7 @@ public class CreditCard extends Account {
     public CreditCard() {
         setCreditLimit(DEFAULT_CREDIT_LIMIT);
         setInterestRate(DEFAULT_INTEREST_RATE);
+        setInterestAddedDateTime(LocalDateTime.now());
     }
 
     @Override
@@ -36,17 +37,21 @@ public class CreditCard extends Account {
     public CreditCard(Money creditLimit) {
         setCreditLimit(creditLimit);
         setInterestRate(DEFAULT_INTEREST_RATE);
+        setInterestAddedDateTime(LocalDateTime.now());
     }
 
     public CreditCard(BigDecimal interestRate) {
         setCreditLimit(DEFAULT_CREDIT_LIMIT);
         setInterestRate(interestRate);
+        setInterestAddedDateTime(LocalDateTime.now());
     }
 
     public CreditCard(Money balance, AccountHolder primaryOwner) {
         super(balance, primaryOwner);
         setCreditLimit(DEFAULT_CREDIT_LIMIT);
         setInterestRate(DEFAULT_INTEREST_RATE);
+        setInterestAddedDateTime(LocalDateTime.now());
+
     }
 
     public Money getCreditLimit() {

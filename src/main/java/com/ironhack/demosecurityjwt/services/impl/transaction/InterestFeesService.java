@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -50,8 +51,10 @@ public class InterestFeesService implements IInterestFeesService {
 
     public void applyMonthlyFee(Checking account) {
         LocalDateTime feeAppliedDateTime = account.getMonthlyFeeAppliedDateTime();
-
-        if (account.getMonthsSinceLastMonthlyFeeDeduction() > 0) {
+        LocalDateTime now = LocalDateTime.now();
+      //  if (account.getMonthsSinceLastMonthlyFeeDeduction() > 0) {
+            if (ChronoUnit.MONTHS.between(feeAppliedDateTime, now) > 0) {
+            //long months = ChronoUnit.MONTHS.between(account.getMonthlyFeeAppliedDateTime(), LocalDateTime.now());
             //new transaction to reflect the deduction of fees
 
             Transaction transaction = new Transaction(account.getMonthlyMaintenanceFee());
@@ -91,7 +94,10 @@ public class InterestFeesService implements IInterestFeesService {
             CreditCard credAccount = (CreditCard) account;
 
             LocalDateTime interestAddedDateTime = credAccount.getInterestAddedDateTime();
-            if (credAccount.getYearsSinceLastInterestAdded() > 0) {
+            LocalDateTime now = LocalDateTime.now();
+            //long years = ChronoUnit.YEARS.between(getInterestAddedDateTime(), LocalDateTime.now());
+           // if (credAccount.getYearsSinceLastInterestAdded() > 0) {
+                if (ChronoUnit.YEARS.between(interestAddedDateTime,now) > 0) {
 
                 // new transaction to reflect the payment of interests.
                 Transaction transaction = new Transaction(credAccount.getLastInterestGenerated());

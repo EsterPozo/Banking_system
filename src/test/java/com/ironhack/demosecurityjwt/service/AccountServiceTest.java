@@ -185,4 +185,35 @@ public class AccountServiceTest {
 
     }
 
+    @Test
+    void addSavings() {
+        AccountHolder primaryOwner = accountHolderRepository.findAll().get(0);
+        AccountHolder owner = new AccountHolder(
+                "Pedro Perez",
+                LocalDate.of(1959, 5, 6),
+                new Address("Calle Dos", "Madrid", "28080"));
+        AccountHolder secondaryOwner = accountHolderRepository.save(owner);
+
+        AccountDTO savingsAccountDTO = new AccountDTO();
+        savingsAccountDTO.setBalance(BigDecimal.valueOf(1000L));
+        savingsAccountDTO.setSecretKey("keysecret");
+        savingsAccountDTO.setInterestRate(BigDecimal.valueOf(0.0025));
+        savingsAccountDTO.setMinBalance(BigDecimal.valueOf(500));
+        savingsAccountDTO.setOwnerId(accountHolderRepository.findByName("Alejandro Martinez").getId());
+        savingsAccountDTO.setOtherOwnerId(accountHolderRepository.findByName("Pedro Perez").getId());
+        accountService.addSavings(savingsAccountDTO);
+
+        List<Account> accounts = accountRepository.findByPrimaryOwner(primaryOwner);
+        List<Account> moreAccounts = accountRepository.findBySecondaryOwner(secondaryOwner);
+
+        assertEquals(5, accounts.size());
+        assertEquals(1, moreAccounts.size());
+
+        assertEquals("keysecret", ((Savings)accounts.get(accounts.size()-1)).getSecretKey());
+        assertEquals("keysecret", ((Savings)moreAccounts.get(0)).getSecretKey());
+        assertEquals(secondaryOwner.getName(), accounts.get(accounts.size()-1).getSecondaryOwner().getName());
+        assertEquals(primaryOwner.getName(), moreAccounts.get(0).getPrimaryOwner().getName());
+
+    }
+
 }

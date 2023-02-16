@@ -154,20 +154,26 @@ public class AccountService implements IAccountService {
 
 
         public Account addSavings(AccountDTO accountDTO) {
-        if (!accountHolderRepository.existsById(accountDTO.getOwnerId()) || !accountHolderRepository.existsById(accountDTO.getOtherOwnerId())) {
+        if (!accountHolderRepository.existsById(accountDTO.getOwnerId()) && !accountHolderRepository.existsById(accountDTO.getOtherOwnerId())) {
             throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
         }
 
         AccountHolder owner = accountHolderRepository.findById(accountDTO.getOwnerId()).get();
-        AccountHolder otherOwner = accountHolderRepository.findById(accountDTO.getOtherOwnerId()).get();
+            AccountHolder otherOwner = new AccountHolder();
+            if(accountDTO.getOtherOwnerId() != null) {
+                otherOwner = accountHolderRepository.findById(accountDTO.getOtherOwnerId()).get();
+            }
+
 
         Savings savings = new Savings();
         savings.setPrimaryOwner(owner);
-        savings.setSecondaryOwner(otherOwner);
         savings.setBalance(new Money(accountDTO.getBalance()));
         savings.setSecretKey(accountDTO.getSecretKey());
         savings.setInterestRate(accountDTO.getInterestRate());
         savings.setMinimumBalance(new Money(accountDTO.getMinBalance()));
+            if (otherOwner.getId() != null) {
+                savings.setSecondaryOwner(otherOwner);
+            }
 
         return savingsRepository.save(savings);
     }

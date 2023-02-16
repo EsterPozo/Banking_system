@@ -32,4 +32,6 @@ public class AdminService {
        // admin.getRoles().add(new Role("ROLE_ADMIN"));
         return adminRepository.save(admin);
     }
+
+
 }

@@ -3,15 +3,15 @@ package com.ironhack.demosecurityjwt.service;
 import com.ironhack.demosecurityjwt.dtos.account.AccountDTO;
 import com.ironhack.demosecurityjwt.dtos.user.AccountHolderDTO;
 import com.ironhack.demosecurityjwt.dtos.user.ThirdPartyDTO;
-import com.ironhack.demosecurityjwt.models.user.AccountHolder;
-import com.ironhack.demosecurityjwt.models.user.Address;
-import com.ironhack.demosecurityjwt.models.user.ThirdParty;
-import com.ironhack.demosecurityjwt.models.user.User;
+import com.ironhack.demosecurityjwt.dtos.user.UserDTO;
+import com.ironhack.demosecurityjwt.models.user.*;
 import com.ironhack.demosecurityjwt.repositories.account.AccountRepository;
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
+import com.ironhack.demosecurityjwt.repositories.user.AdminRepository;
 import com.ironhack.demosecurityjwt.repositories.user.ThirdPartyRepository;
 import com.ironhack.demosecurityjwt.repositories.user.UserRepository;
 import com.ironhack.demosecurityjwt.services.impl.user.AccountHolderService;
+import com.ironhack.demosecurityjwt.services.impl.user.AdminService;
 import com.ironhack.demosecurityjwt.services.impl.user.ThirdPartyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +45,12 @@ public class UserServicesTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AdminRepository adminRepository;
+
+    @Autowired
+    private AdminService adminService;
+
     @BeforeEach
     void setUp() {
         AccountHolder accountHolder = new AccountHolder(
@@ -58,12 +64,22 @@ public class UserServicesTest {
 
         accountHolderRepository.save(accountHolder);
         //thirdPartyRepository.save(thirdPartyUser);
+
+        Admin admin = new Admin();
+        admin.setName("Alejandro");
+        admin.setUsername("admin");
+        admin.setPassword("ironhack");
+        adminRepository.save(admin);
     }
 
     @AfterEach
     void tearDown() {
         accountHolderRepository.deleteAll();
         thirdPartyRepository.deleteAll();
+        adminRepository.deleteAll();
+        userRepository.deleteAll();
+        accountRepository.deleteAll();
+
 
     }
 
@@ -114,8 +130,26 @@ public class UserServicesTest {
         ThirdParty thirdPartyUser = thirdPartyService.addThirdParty(thirdPartyUserDTO);
 
         List<User> owners = userRepository.findAll();
-        assertEquals(6, owners.size());
+        assertEquals(3, owners.size());
         assertEquals("Hello World", owners.get(owners.size()-1).getName());
     }
+
+    @Test
+    void getAdmins() {
+        assertEquals(1, adminService.getAdmins().size());
+    }
+
+    @Test
+    void addAdmin() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("Admin 2");
+        userDTO.setUsername("admin2");
+        userDTO.setPassword("password");
+        adminService.addAdmin(userDTO);
+
+        assertEquals(2, adminRepository.findAll().size());
+        assertEquals(7, userRepository.findAll().size());
+    }
+
 
 }

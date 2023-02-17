@@ -25,7 +25,7 @@ public class AccountHolder extends User {
 //    An optional mailingAddress
 
 //    @Autowired
-//   RoleRepository roleRepository;
+//    private RoleRepository roleRepository;
 
     private LocalDate dateOfBirth;
 
@@ -60,19 +60,35 @@ public class AccountHolder extends User {
     public AccountHolder() {
        // Role role = roleRepository.save(new Role("ROLE_ACCOUNT_HOLDER"));
 //        Role role = roleRepository.findByName("ROLE_ACCOUNT_HOLDER");
-//        this.getRoles().add(role);
+       // this.setRoles();
 
     }
 
     public AccountHolder( String name,LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress ) {
+        //utilizar super completo
         super(name);
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
+
         //findbyname role
-//        Role role = roleRepository.findByName("ROLE_ACCOUNT_HOLDER");
+      //  Role role = roleRepository.findByName("ROLE_ACCOUNT_HOLDER");
 //        this.getRoles().add(role);
     }
+
+    public AccountHolder(String name, String username, String password, LocalDate dateOfBirth, Address primaryAddress) {
+        super(name, username, password, List.of(new Role(2L,"ROLE_ACCOUNT_HOLDER")));
+        this.dateOfBirth = dateOfBirth;
+        this.primaryAddress = primaryAddress;
+    }
+
+    public AccountHolder(String name, String username, String password, Collection<Role> roles, LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress) {
+        super(name, username, password, roles);
+        this.dateOfBirth = dateOfBirth;
+        this.primaryAddress = primaryAddress;
+        this.mailingAddress = mailingAddress;
+    }
+
     public AccountHolder(String name, LocalDate dateOfBirth, Address primaryAddress) {
         super(name);
         this.dateOfBirth = dateOfBirth;

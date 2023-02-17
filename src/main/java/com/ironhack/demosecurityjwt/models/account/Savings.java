@@ -8,28 +8,38 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Entity
-public class Savings extends Account{
+public class Savings extends Account {
     /*Savings are identical to Checking accounts except that they
 
     Do NOT have a monthlyMaintenanceFee
     Do have an interestRate*/
-    private static final BigDecimal DEFAULT_INTEREST_RATE = new BigDecimal("0.0025");
+    private static final BigDecimal DEFAULT_INTEREST_RATE = new BigDecimal("0.0025", new MathContext(4,RoundingMode.HALF_EVEN));
     private final static Money MINIMUM_BALANCE = new Money(BigDecimal.valueOf(1000L));
 
+
+    @Column(precision = 19, scale = 4,columnDefinition = "decimal(19,4)")
     private BigDecimal interestRate;
     @CreationTimestamp
     private LocalDateTime creationDate;
     private String secretKey;
     private LocalDateTime interestAddedDateTime;
 
-
+//    @Embedded
+//    @AttributeOverrides({
+//            @AttributeOverride(name = "currency", column = @Column(name = "interestRate_currency")),
+//            @AttributeOverride(name = "amount", column = @Column(name = "interesRate_amount"))
+//    })
+//    private Money interestRate;
 
     @Embedded
     @AttributeOverrides({
@@ -87,10 +97,13 @@ public class Savings extends Account{
     }
 
     public void setInterestRate(BigDecimal interestRate) {
+
         if (interestRate.compareTo(BigDecimal.valueOf(0.5)) > 0) {
             throw new ResponseStatusException(BAD_REQUEST,"Interest rate can't be bigger than 0.5" );
                     }
+      //  this.interestRate = new BigDecimal(interestRate.doubleValue(),new MathContext(4,RoundingMode.HALF_EVEN));
         this.interestRate = interestRate;
+
     }
 
     public LocalDateTime getCreationDate() {
@@ -140,15 +153,20 @@ public class Savings extends Account{
 
     public Money getLastInterestGenerated() {
         BigDecimal earnedInterests = BigDecimal.ZERO;
-        BigDecimal interest = getAnnualInterestRate();
+       // BigDecimal interest = getAnnualInterestRate();
+        BigDecimal interest = getInterestRate().setScale(6);
+        System.out.println("interest: " + interest);
         for(int i=0; i<getYearsSinceLastInterestAdded(); i++) {
             earnedInterests = earnedInterests.add((getBalance().getAmount()).multiply(interest));
         }
+        System.out.println("earned Interest " + earnedInterests);
         return new Money(earnedInterests);
     }
 
     public void updateInterestAddedDateTime() {
         setInterestAddedDateTime(LocalDateTime.now());
     }
+
+
 
 }

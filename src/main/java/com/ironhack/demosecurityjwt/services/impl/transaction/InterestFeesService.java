@@ -4,6 +4,7 @@ import com.ironhack.demosecurityjwt.models.account.*;
 import com.ironhack.demosecurityjwt.models.transaction.Transaction;
 import com.ironhack.demosecurityjwt.models.transaction.enums.TransType;
 
+import com.ironhack.demosecurityjwt.repositories.account.CreditCardRepository;
 import com.ironhack.demosecurityjwt.services.interfaces.IAccountService;
 import com.ironhack.demosecurityjwt.services.interfaces.IInterestFeesService;
 import com.ironhack.demosecurityjwt.services.interfaces.ITransactionService;
@@ -25,6 +26,8 @@ public class InterestFeesService implements IInterestFeesService {
 
     @Autowired
     private IAccountService accountService;
+    @Autowired
+    private CreditCardRepository creditCardRepository;
 
     public Account applyInterestsFeesService(Account account) {
         if (account instanceof Checking) {
@@ -33,11 +36,12 @@ public class InterestFeesService implements IInterestFeesService {
             return accountService.addAccount(checkAccount);
         } else if (account instanceof Savings) {
             Savings savAccount = (Savings) account;
+            System.out.println("interest latest added time" + ((Savings) account).getInterestAddedDateTime());
             applyAnnualInterest(savAccount);
             return accountService.addAccount(savAccount);
         } else if(account instanceof CreditCard) {
             CreditCard credAccount = (CreditCard) account;
-            applyAnnualInterest(credAccount);
+            applyMonthlyInterest(credAccount);
             return accountService.addAccount(credAccount);
         }else if(account instanceof StudentChecking) {
             StudentChecking studAccount = (StudentChecking) account;
@@ -74,10 +78,13 @@ public class InterestFeesService implements IInterestFeesService {
         if (account instanceof Savings) {
             Savings savAccount = (Savings) account;
             LocalDateTime interestAddedDateTime = savAccount.getInterestAddedDateTime();
+            System.out.println("años :" + savAccount.getYearsSinceLastInterestAdded());
             if (savAccount.getYearsSinceLastInterestAdded() > 0) {
+                System.out.println("entro en el if pq años > 0");
 
                 // new transaction to reflect the payment of interests.
                 Transaction transaction = new Transaction(savAccount.getLastInterestGenerated());
+                System.out.println("transaction amount" + transaction.getAmount().getAmount());
                 transaction.setTransType(TransType.ANNUAL_INTERESTS);
                 //transaction.setFromAccount(null);
                 transaction.setToAccount((Account) account);

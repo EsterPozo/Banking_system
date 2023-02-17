@@ -48,7 +48,7 @@ public class BankingSystemApp /*implements CommandLineRunner*/ {
   @Bean
     CommandLineRunner run(UserService userService) {
         return args -> {
-            userService.saveRole(new Role(null, "ROLE_USER"));
+            //userService.saveRole(new Role(null, "ROLE_USER"));
             userService.saveRole(new Role(null, "ROLE_ADMIN"));
             userService.saveRole(new Role(null, "ROLE_ACCOUNT_HOLDER"));
             userService.saveRole(new Role(null, "ROLE_THIRD_PARTY"));

@@ -81,7 +81,8 @@ public class TransactionServiceTest {
         savingsRepository.save(savingsAccount);
       creditCardRepository.save(creditCardAccount);
 
-        Transaction transaction = new Transaction(checkingAccount, studentCheckingAccount, new Money(BigDecimal.valueOf(100L)), "Alejandro Martínez Naredo", "Esto es una prueba");
+        Money amount = new Money(BigDecimal.valueOf(100L));
+        Transaction transaction = new Transaction(checkingAccount, studentCheckingAccount, amount, "Alejandro Martínez Naredo", "Esto es una prueba");
         transactionRepository.save(transaction);
     }
 
@@ -115,9 +116,9 @@ public class TransactionServiceTest {
         Transaction transaction = new Transaction(fromAccount, toAccount, new Money(BigDecimal.valueOf(100L)), "Alejandro", "Hola amigo");
         transactionService.addTransaction(transaction);
         assertEquals(2, transactionService.getTransactions().size());
-      //ACTUAL TRANSACTION NOT WORKING!!
-       //assertEquals(fromBalance.intValue() -100, fromAccount.getBalance().getAmount().intValue());
-//        assertEquals(toBalance.intValue() + 100, toAccount.getBalance().getAmount().intValue());
+
+       assertEquals(fromBalance.intValue() -100, fromAccount.getBalance().getAmount().intValue());
+        assertEquals(toBalance.intValue() + 100, toAccount.getBalance().getAmount().intValue());
     }
 
 }

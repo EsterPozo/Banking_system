@@ -129,8 +129,8 @@ public class MoneyTransferServiceTest {
         destination = accountRepository.findByPrimaryOwner(accountHolderRepository.findAll().get(0)).get(1);
 
         BigDecimal diff = destination.getBalance().getAmount().subtract(origin.getBalance().getAmount()).abs();
-       // NOT WORKING!!
-        //assertEquals(BigDecimal.valueOf(200L).setScale(2, RoundingMode.HALF_EVEN), diff);
+
+        assertEquals(BigDecimal.valueOf(200L).setScale(2, RoundingMode.HALF_EVEN), diff);
     }
 
 }

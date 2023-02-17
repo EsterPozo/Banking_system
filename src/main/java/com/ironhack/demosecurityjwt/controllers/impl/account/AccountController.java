@@ -34,7 +34,7 @@ public class AccountController {
 
     @GetMapping("/bank/accounts/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Account getAccount(Long id) {
+    public Account getAccount(@PathVariable Long id) {
         return accountService.getAccountById(id);
     }
 

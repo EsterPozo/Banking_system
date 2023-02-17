@@ -13,6 +13,7 @@ import com.ironhack.demosecurityjwt.repositories.user.UserRepository;
 import com.ironhack.demosecurityjwt.services.impl.user.AccountHolderService;
 import com.ironhack.demosecurityjwt.services.impl.user.AdminService;
 import com.ironhack.demosecurityjwt.services.impl.user.ThirdPartyService;
+import com.ironhack.demosecurityjwt.services.impl.user.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,10 +48,15 @@ public class UserServicesTest {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private AdminRepository adminRepository;
 
     @Autowired
     private AdminService adminService;
+
+
 
     @BeforeEach
     void setUp() {
@@ -59,10 +66,14 @@ public class UserServicesTest {
                 new Address("Calle Velázquez 1", "Gijón", "33201"));
         accountHolder.setUsername("username1");
         accountHolder.setPassword("password");
-        //AccountHolder accountHolder2 = new AccountHolder("Alejandro Martínez", LocalDate.of(1984, 4, 14), new Address("Calle Corrida", "Gijón", "33201"));
+
+        AccountHolder accountHolder2 = new AccountHolder("Alba Pou", "alba_pou", "1234", LocalDate.of(1990, 4, 14), new Address("Calle Pizarro", "Mataro", "08032"));
         //ThirdParty thirdPartyUser = new ThirdParty("Google", "Hola");
 
         accountHolderRepository.save(accountHolder);
+        userService.addRoleToUser("username1","ROLE_ACCOUNT_HOLDER");
+        accountHolderRepository.save(accountHolder2);
+       // userService.addRoleToUser("alba_pou", "ROLE_ACCOUNT_HOLDER" );
         //thirdPartyRepository.save(thirdPartyUser);
 
         Admin admin = new Admin();
@@ -114,7 +125,7 @@ public class UserServicesTest {
         AccountHolder accountHolder = accountHolderService.addAccountHolder(accountHolderDTO);
 
         List<AccountHolder> owners = accountHolderRepository.findAll();
-        assertEquals(2, owners.size());
+        assertEquals(3, owners.size());
        assertEquals("Ana Fernández", owners.get(owners.size()-1).getName());
     }
 

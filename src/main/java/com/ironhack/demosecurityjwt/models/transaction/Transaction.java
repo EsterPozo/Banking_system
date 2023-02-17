@@ -5,6 +5,8 @@ import com.ironhack.demosecurityjwt.models.account.Account;
 import com.ironhack.demosecurityjwt.models.transaction.enums.TransType;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 public class Transaction {
@@ -23,7 +25,8 @@ public class Transaction {
     @Embedded
     private Money amount;
 
-    //timestamp missing - para comprobar el tiempo
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime timestamp;
 
     @Enumerated(EnumType.STRING)
     private TransType transType;
@@ -32,18 +35,31 @@ public class Transaction {
     private String description;
 
     public Transaction() {
+
+        setTimestamp(LocalDateTime.now());
     }
 
     public Transaction(Money amount) {
+        this();
         this.amount = amount;
+        setTimestamp(LocalDateTime.now());
     }
 
     public Transaction(Account fromAccount, Account toAccount, Money amount, String authorName, String description) {
-        this.fromAccount = fromAccount;
-        this.toAccount = toAccount;
         this.amount = amount;
-        this.authorName = authorName;
-        this.description = description;
+        setFromAccount(fromAccount);
+        setToAccount(toAccount);
+        setAuthorName(authorName);
+        setDescription(description);
+        setTimestamp(LocalDateTime.now());
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     public TransType getTransType() {
@@ -59,10 +75,15 @@ public class Transaction {
     }
 
     public void setToAccount(Account toAccount) {
+        if (toAccount == null || toAccount == this.toAccount)
+            return;
         this.toAccount = toAccount;
+        System.out.println("entro en setTo account");
+        toAccount.addDepositTransaction(this);
     }
 
     public Account getFromAccount() {
+
         return fromAccount;
     }
 
@@ -99,6 +120,9 @@ public class Transaction {
     }
 
     public void setFromAccount(Account fromAccount) {
+        if (fromAccount == null || fromAccount == this.fromAccount)
+            return;
         this.fromAccount = fromAccount;
+        fromAccount.addWithdrawalTransaction(this);
     }
 }

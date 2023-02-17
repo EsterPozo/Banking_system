@@ -3,6 +3,8 @@ package com.ironhack.demosecurityjwt.models.user;
 import jakarta.persistence.Entity;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 public class ThirdParty extends User {
@@ -11,14 +13,15 @@ public class ThirdParty extends User {
     private String hashedKey;
 
     public ThirdParty(String hashedKey) {
+        super(List.of(new Role(3L,"ROLE_THIRD_PARTY")));
         this.hashedKey = hashedKey;
-      // this.getRoles().add(new Role("ROLE_THIRD_PARTY"));
+
     }
 
     public ThirdParty(String name, String hashedKey) {
-        super(name);
+        super(name,List.of(new Role(3L,"ROLE_THIRD_PARTY")));
         this.hashedKey = hashedKey;
-       // this.getRoles().add(new Role("ROLE_THIRD_PARTY"));
+
 
     }
 

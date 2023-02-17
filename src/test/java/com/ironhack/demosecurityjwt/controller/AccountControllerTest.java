@@ -1,12 +1,11 @@
 package com.ironhack.demosecurityjwt.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.demosecurityjwt.dtos.account.AccountDTO;
+import com.ironhack.demosecurityjwt.dtos.transaction.TransactionDTO;
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.*;
-import com.ironhack.demosecurityjwt.models.user.AccountHolder;
-import com.ironhack.demosecurityjwt.models.user.Address;
-import com.ironhack.demosecurityjwt.models.user.Admin;
-import com.ironhack.demosecurityjwt.models.user.ThirdParty;
+import com.ironhack.demosecurityjwt.models.user.*;
 import com.ironhack.demosecurityjwt.repositories.account.*;
 import com.ironhack.demosecurityjwt.repositories.transaction.TransactionRepository;
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
@@ -17,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.ParameterResolutionDelegate;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -28,8 +29,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -177,7 +180,115 @@ public class AccountControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().contains(owners.get(0).getName()));
-       // assertTrue(result.getResponse().getContentAsString().contains(owners.get(1).getName()));
     }
+
+    @Test
+   // @WithMockUser(username = "admin", password = "ironhack", roles = {"ADMIN"})
+    void addChecking() throws Exception {
+        List<AccountHolder> owners = accountHolderRepository.findAll();
+        Long idOwner = owners.get(1).getId();
+
+        AccountDTO check = new AccountDTO();
+        check.setBalance(BigDecimal.valueOf(1000L));
+        check.setSecretKey("12345678");
+        check.setOwnerId(idOwner);
+        String body = objectMapper.writeValueAsString(check);
+
+        MvcResult result =
+                mockMvc.perform(
+                                post("/bank/accounts/checking/")
+                                        .content(body)
+                                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andReturn();
+        assertTrue(result.getResponse().getContentAsString().contains(owners.get(1).getName()));
+        assertTrue(result.getResponse().getContentAsString().contains(check.getSecretKey()));
+        // student checking account because age < 24
+        assertTrue(result.getResponse().getContentAsString().contains(studentCheckingRepository.findAll().get(0).getPrimaryOwner().getName()));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", password = "ironhack", roles = {"ADMIN"})
+    void addSavings() throws Exception {
+        List<AccountHolder> owners = accountHolderRepository.findAll();
+        Long idOwner = owners.get(1).getId();
+
+        AccountDTO sav = new AccountDTO();
+        sav.setBalance(BigDecimal.valueOf(2000L));
+        sav.setSecretKey("12345678");
+        sav.setInterestRate(new BigDecimal("0.1234"));
+        sav.setOwnerId(idOwner);
+        String body = objectMapper.writeValueAsString(sav);
+
+        MvcResult result =
+                mockMvc.perform(
+                                post("/bank/accounts/savings/")
+                                        .content(body)
+                                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andReturn();
+        assertTrue(result.getResponse().getContentAsString().contains(owners.get(1).getName()));
+       assertTrue(result.getResponse().getContentAsString().contains(sav.getSecretKey()));
+       assertTrue(result.getResponse().getContentAsString().contains("0.1234")); // interestRate
+        assertTrue(result.getResponse().getContentAsString().contains("1000.00")); // default minimumBalance
+    }
+
+//    @Test
+//   // @WithMockUser(username = "admin", password = "ironhack", roles = {"ADMIN"})
+//    void addCreditCard() throws Exception {
+//        List<AccountHolder> owners = accountHolderRepository.findAll();
+//        Long idOwner = owners.get(1).getId();
+//
+//        AccountDTO cc = new AccountDTO();
+//        cc.setBalance(BigDecimal.valueOf(2000L));
+//        cc.setInterestRate(new BigDecimal("0.1234"));
+//        cc.setCreditLimit(BigDecimal.valueOf(2121));
+//        cc.setOwnerId( idOwner);
+//        String body = objectMapper.writeValueAsString(cc);
+//
+//                MvcResult result =
+//                mockMvc.perform(
+//                                post("/bank/accounts/creditcard/")
+//                                        .content(body)
+//                                        .contentType(MediaType.APPLICATION_JSON))
+//                        .andExpect(status().isCreated())
+//                        .andReturn();
+//       // assertTrue(result.getResponse().getContentAsString().contains(owners.get(0).getName()));
+//       // assertTrue(result.getResponse().getContentAsString().contains("0.1234")); // interestRate
+//      //  assertTrue(result.getResponse().getContentAsString().contains("100.00")); // default creditLimit
+//    }
+
+//    @Test
+//    void transferMoney() throws Exception {
+//        List<AccountHolder> owners = accountHolderRepository.findAll();
+//        Long idOwner = owners.get(0).getId();
+//        Account fromAccount = owners.get(0).getPrimaryAccounts().get(1);
+//        Account toAccount = owners.get(0).getPrimaryAccounts().get(0);
+//
+//        TransactionDTO transfer = new TransactionDTO();
+//        transfer.setAmount(new BigDecimal("200.00"));
+//        transfer.setToAccountId(toAccount.getId());
+//        transfer.setName(owners.get(0).getName());
+//        transfer.setDescription("More savings!");
+//        transfer.setFromAccountId(fromAccount.getId());
+//        String body = objectMapper.writeValueAsString(transfer);
+//
+//        AccountHolder user1 = (AccountHolder) fromAccount.getPrimaryOwner();
+//        //User user  = fromAccount.getPrimaryOwner();
+//        UserDetails userDetails = (UserDetails) user1;
+//
+//
+//        MvcResult result =
+//                mockMvc.perform(
+//                                post("/accounts/transfer")
+//                                        //.with(user(userDetails))
+//                                        .content(body)
+//                                        .contentType(MediaType.APPLICATION_JSON))
+//                        .andExpect(status().isCreated())
+//                        .andReturn();
+//        //assertTrue(result.getResponse().getContentAsString().contains(owners.get(0).getName()));
+//       // assertTrue(result.getResponse().getContentAsString().contains("800.00")); // savings account
+//    }
+
 
 }

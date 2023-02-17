@@ -80,8 +80,22 @@ public class SecurityConfig {
                // .requestMatchers("/api/login/**").permitAll()
                // .requestMatchers(GET, "/api/users").hasAnyAuthority("ROLE_USER")
                 //.requestMatchers(POST, "/api/users").hasAnyAuthority("ROLE_ADMIN")
+                //Admins should be able to access the balance for any account and to modify it. - understanding they can do ALL methods of accounts and transactions.
+                .requestMatchers(GET, "/bank/accounts/**").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(POST, "/bank/accounts/**").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/accounts/**").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(POST, "/accounts/**").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/bank/**").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(POST, "/bank/**").hasAnyAuthority("ROLE_ADMIN")
+                //Account Holders accesses
+                .requestMatchers(GET, "/accounts/**").hasAuthority("ROLE_ACCOUNT_HOLDER")
+                .requestMatchers(POST, "/accounts/transfer").hasAuthority("ROLE_ACCOUNT_HOLDER")
+                //Third party users
+                .requestMatchers(POST,"/accounts/transfer").hasAuthority("ROLE_THIRD_PARTY")
+                .requestMatchers(GET, "/accounts/**").hasAuthority("ROLE_THIRD_PARTY")
                 //.anyRequest().authenticated())
-                .anyRequest().permitAll());
+                .anyRequest().denyAll());
+              //  .anyRequest().permitAll());
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);
         // Add the custom authorization filter before the standard authentication filter.

@@ -17,7 +17,7 @@ import static jakarta.persistence.FetchType.EAGER;
  */
 @Entity
 @Data
-@NoArgsConstructor
+
 @AllArgsConstructor
 public class User implements UserDetails {
     /**
@@ -52,6 +52,18 @@ public class User implements UserDetails {
 
     public User(String name) {
         this.name = name;
+    }
+
+    public User(String name, Collection<Role> roles) {
+        this.name = name;
+        this.roles = roles;
+    }
+
+    public User() {
+    }
+
+    public User(Collection<Role> roles) {
+        this.roles = roles;
     }
 
     public User(String name, String username, String password, Collection<Role> roles) {

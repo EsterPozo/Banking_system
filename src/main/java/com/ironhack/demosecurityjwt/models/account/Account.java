@@ -57,9 +57,11 @@ public abstract class Account {
 
     @OneToMany(mappedBy = "toAccount", fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
+    @JsonBackReference
     private List<Transaction> depositTxs;
     @OneToMany(mappedBy = "fromAccount", fetch = FetchType.EAGER)
     @Fetch(FetchMode.SUBSELECT)
+    @JsonBackReference
     private List<Transaction> withdrawalTxs;
 
     private LocalDateTime lastAccessDateTime;

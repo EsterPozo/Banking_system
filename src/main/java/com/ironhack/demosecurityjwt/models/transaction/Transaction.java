@@ -1,5 +1,6 @@
 package com.ironhack.demosecurityjwt.models.transaction;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.Account;
 import com.ironhack.demosecurityjwt.models.transaction.enums.TransType;
@@ -16,10 +17,12 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "from_account_id")
+    @JsonBackReference
     private Account fromAccount;
 
     @ManyToOne
     @JoinColumn(name = "to_account_id")
+    @JsonBackReference
     private Account toAccount;
 
     @Embedded

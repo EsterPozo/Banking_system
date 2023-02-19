@@ -10,6 +10,7 @@ import com.ironhack.demosecurityjwt.repositories.account.*;
 import com.ironhack.demosecurityjwt.repositories.transaction.TransactionRepository;
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
 import com.ironhack.demosecurityjwt.repositories.user.AdminRepository;
+import com.ironhack.demosecurityjwt.repositories.user.ThirdPartyRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,6 +61,8 @@ public class AccountControllerTest {
     private SavingsRepository savingsRepository;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private ThirdPartyRepository thirdPartyRepository;
 
     @BeforeEach
     void setUp() {
@@ -70,28 +73,20 @@ public class AccountControllerTest {
                 .build();
 
         AccountHolder accountHolder = new AccountHolder(
-                "Mr. Account Holder",
+                "Mr. Account Holder", "mister", "password1",
                 LocalDate.of(1990, 4, 14),
-                new Address("Street", "City", "PostalCode"));
-        accountHolder.setUsername("mister");
-        accountHolder.setPassword("mister");
-//        ah.setRoles(new HashSet<Role>(Collections.singletonList(new Role("OWNER", ah))));
-        AccountHolder accountHolder2 = new AccountHolder(
-                "Mrs. Account Holder",
-                LocalDate.of(2000, 4, 14),
-                new Address("Street", "City", "PostalCode"));
-        accountHolder2.setUsername("mistress");
-        accountHolder2.setPassword("mistress");
-//        ah2.setRoles(new HashSet<Role>(Collections.singletonList(new Role("OWNER", ah2))));
-        ThirdParty tpu = new ThirdParty(
-                "Third Party User",
-                "hashedKey");
-        tpu.setUsername("thirdpartyuser");
-        tpu.setPassword("thirdpartyuser");
-//        tpu.setRoles(new HashSet<Role>(Collections.singletonList(new Role("OWNER", tpu))));
+                new Address("Calle Velázquez 1", "Gijón", "33201"));
 
+        AccountHolder accountHolder2 = new AccountHolder(
+                "Mrs. Account Holder", "mistress", "password",
+                LocalDate.of(2000, 4, 14),
+                new Address("Calle Pizarro 1", "Barcelona", "08201"));
+
+
+        ThirdParty tpu = new ThirdParty("Third Party User","thirdpartyuser","thirdpartyuser", "hashedKey");
         accountHolderRepository.save(accountHolder);
         accountHolderRepository.save(accountHolder2);
+        thirdPartyRepository.save(tpu);
 
 //        Checking check = new Checking(
 //                tpu,
@@ -260,37 +255,38 @@ public class AccountControllerTest {
        assertTrue(result.getResponse().getContentAsString().contains("2121.00")); // default creditLimit
     }
 
-//    @Test
-//    void transferMoney() throws Exception {
-//        List<AccountHolder> owners = accountHolderRepository.findAll();
-//        Long idOwner = owners.get(0).getId();
-//        Account fromAccount = owners.get(0).getPrimaryAccounts().get(1);
-//        Account toAccount = owners.get(0).getPrimaryAccounts().get(0);
-//
-//        TransactionDTO transfer = new TransactionDTO();
-//        transfer.setAmount(new BigDecimal("200.00"));
-//        transfer.setToAccountId(toAccount.getId());
-//        transfer.setName(owners.get(0).getName());
-//        transfer.setDescription("More savings!");
-//        transfer.setFromAccountId(fromAccount.getId());
-//        String body = objectMapper.writeValueAsString(transfer);
-//
-//        AccountHolder user1 = (AccountHolder) fromAccount.getPrimaryOwner();
-//        //User user  = fromAccount.getPrimaryOwner();
-//        UserDetails userDetails = (UserDetails) user1;
-//
-//
-//        MvcResult result =
-//                mockMvc.perform(
-//                                post("/accounts/transfer")
-//                                        //.with(user(userDetails))
-//                                        .content(body)
-//                                        .contentType(MediaType.APPLICATION_JSON))
-//                        .andExpect(status().isCreated())
-//                        .andReturn();
-//        //assertTrue(result.getResponse().getContentAsString().contains(owners.get(0).getName()));
-//       // assertTrue(result.getResponse().getContentAsString().contains("800.00")); // savings account
-//    }
+    @Test
+    void transferMoney() throws Exception {
+        List<AccountHolder> owners = accountHolderRepository.findAll();
+        Long idOwner = owners.get(0).getId();
+        Account fromAccount = owners.get(0).getPrimaryAccounts().get(1);
+        Account toAccount = owners.get(0).getPrimaryAccounts().get(0);
+
+        TransactionDTO transfer = new TransactionDTO();
+        transfer.setAmount(new BigDecimal("200.00"));
+        transfer.setToAccountId(toAccount.getId());
+        transfer.setName(owners.get(0).getName());
+        transfer.setDescription("More savings!");
+        transfer.setFromAccountId(fromAccount.getId());
+        String body = objectMapper.writeValueAsString(transfer);
+
+        AccountHolder user1 = (AccountHolder) fromAccount.getPrimaryOwner();
+
+        UserDetails userDetails = (UserDetails) user1;
+
+
+
+        MvcResult result =
+                mockMvc.perform(
+                                post("/accounts/transfer")
+                                        .with(user(userDetails))
+                                        .content(body)
+                                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andReturn();
+        assertTrue(result.getResponse().getContentAsString().contains(owners.get(0).getName()));
+        assertTrue(result.getResponse().getContentAsString().contains("800.00")); // savings account
+    }
 
 
 }

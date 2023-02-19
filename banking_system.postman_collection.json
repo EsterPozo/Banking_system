@@ -1,0 +1,724 @@
+{
+	"info": {
+		"_postman_id": "4dfffa1a-87f6-43f7-ab14-54dd0b80d906",
+		"name": "Banking System",
+		"description": "Ironhack Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ADMIN ONLY",
+			"item": [
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "/bank/users",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/bank/users",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"users"
+									]
+								},
+								"description": "Read list of all users"
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/users/owners",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/bank/users/owners",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"users",
+										"owners"
+									]
+								},
+								"description": "Read list of all owners"
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/users/owners/{id}",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/bank/users/owners/3",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"users",
+										"owners",
+										"3"
+									]
+								},
+								"description": "Read owner"
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/users/admins",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/bank/users/admins",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"users",
+										"admins"
+									]
+								},
+								"description": "Read list of all admins"
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/users/admins",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"admin_new\",\r\n    \"password\": \"ironhack\",\r\n    \"name\": \"Administrator 1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/bank/users/admins",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"users",
+										"admins"
+									]
+								},
+								"description": "Create new admin user "
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/users/owners/ah",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "    {\r\n        \"type\": \"account_holder\",\r\n        \"username\": \"owner24\",\r\n        \"password\": \"ironhack\",\r\n        \"name\": \"Peter Green\",\r\n        \"dateOfBirth\": \"1984-04-14\",\r\n        \"street\": \"Street\",\r\n        \"city\": \"City\",\r\n        \"postalCode\": \"PostalCode\"\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/bank/users/owners/ah",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"users",
+										"owners",
+										"ah"
+									]
+								},
+								"description": "Create new account holder"
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/users/owners/tpu",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "    {\r\n        \"type\": \"third_party_user\",\r\n        \"username\": \"anothertpu\",\r\n        \"password\": \"ironhack\",\r\n        \"name\": \"Third Party User\",\r\n        \"hashedKey\": \"hashedKey\"\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/bank/users/owners/tpu",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"users",
+										"owners",
+										"tpu"
+									]
+								},
+								"description": "Create new third party user"
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/users/owners/{id}/accounts",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/bank/users/owners/3/accounts",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"users",
+										"owners",
+										"3",
+										"accounts"
+									]
+								},
+								"description": "Read list of accounts of an owner"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "accounts",
+					"item": [
+						{
+							"name": "/bank/accounts",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/bank/accounts",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"accounts"
+									]
+								},
+								"description": "Read list of all accounts"
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/accounts/{id}",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"balance\": 1000.00\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/bank/accounts/297",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"accounts",
+										"297"
+									]
+								},
+								"description": "Update balance of the account"
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/accounts/checking/",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"balance\": 1000.00,\r\n    \"secretKey\": \"1234\" \"ownerId\": \"3\"  \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/bank/accounts/checking",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"accounts",
+										"checking"
+									]
+								},
+								"description": "Create new checking account with owner"
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/accounts/savings/",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"balance\": 3000.00,\r\n    \"interestRate\": 0.0030,\r\n    \"minBalance\": 500.00 \"ownerId\": \"6\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/bank/accounts/savings",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"accounts",
+										"savings"
+									]
+								},
+								"description": "Create new savings account with owner"
+							},
+							"response": []
+						},
+						{
+							"name": "/bank/accounts/creditcard",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "ironhack",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"balance\": 3000.00,\r\n    \"interestRate\": 0.15,\r\n    \"creditLimit\": 100000.00\"  \"ownerId\": \"4\"r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/bank/accounts/creditcard/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"accounts",
+										"creditcard"
+									]
+								},
+								"description": "Create new credit card account with owner"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "transactions",
+					"item": [
+						{
+							"name": "/bank/transactions",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/bank/transactions",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"bank",
+										"transactions"
+									]
+								},
+								"description": "Read list of all transactions"
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "Endpoints secured with admin role access",
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "ironhack",
+						"type": "string"
+					}
+				]
+			}
+		},
+		{
+			"name": "AUTHENTICATED OWNER",
+			"item": [
+				{
+					"name": "/accounts/{id}",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "amnaredo",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ironhack",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/accounts/310",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"310"
+							]
+						},
+						"description": "Read account"
+					},
+					"response": []
+				},
+				{
+					"name": "/accounts/transfer",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "amnaredo",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ironhack",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"toAccountId\": \"309\",\r\n   \"fromAccountId\": \"201\",\r\n  \"amount\": 300.00,\r\n    \"name\": \"Alejandro\",\r\n    \"description\": \"New money transfer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/accounts/transaction",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"transfer"
+							]
+						},
+						"description": "Create money transfer from account"
+					},
+					"response": []
+				},
+				{
+					"name": "/accounts/{id}/transactions",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "amnareda",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ironhack",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/accounts/311/transactions",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"311",
+								"transactions"
+							]
+						},
+						"description": "Read list of all transactions of account"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints secured with basic user authentication and authorization",
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "owner1",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "ironhack",
+						"type": "string"
+					}
+				]
+			}
+		}
+	]
+}

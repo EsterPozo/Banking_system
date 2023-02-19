@@ -3,18 +3,17 @@ package com.ironhack.demosecurityjwt.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ironhack.demosecurityjwt.dtos.user.AccountHolderDTO;
+import com.ironhack.demosecurityjwt.dtos.user.ThirdPartyDTO;
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.*;
-import com.ironhack.demosecurityjwt.models.user.AccountHolder;
-import com.ironhack.demosecurityjwt.models.user.Address;
-import com.ironhack.demosecurityjwt.models.user.Admin;
-import com.ironhack.demosecurityjwt.models.user.ThirdParty;
+import com.ironhack.demosecurityjwt.models.user.*;
 import com.ironhack.demosecurityjwt.repositories.account.*;
 import com.ironhack.demosecurityjwt.repositories.transaction.TransactionRepository;
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
 import com.ironhack.demosecurityjwt.repositories.user.AdminRepository;
 import com.ironhack.demosecurityjwt.repositories.user.ThirdPartyRepository;
 import com.ironhack.demosecurityjwt.services.impl.user.AccountHolderService;
+import com.ironhack.demosecurityjwt.services.impl.user.ThirdPartyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,6 +72,9 @@ public class UserControllerTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ThirdPartyService thirdPartyService;
 
     @BeforeEach
     void setUp() {
@@ -189,6 +191,31 @@ public class UserControllerTest {
         List<AccountHolder> owners = accountHolderService.getOwners();
         assertEquals(3, owners.size());
         assertTrue(result.getResponse().getContentAsString().contains("Mrs. Account Holder"));
+    }
+
+    //@WithMockUser(username = "admin", password = "ironhack", roles = {"ADMIN"})
+    @Test
+    void addThirdPartyUser() throws Exception {
+
+        ThirdPartyDTO tpu = new ThirdPartyDTO();
+        tpu.setName("Another TPU");
+        tpu.setHashedKey("anotherHashedKey");
+        tpu.setUsername("username");
+        tpu.setPassword("password");
+        String body = objectMapper.writeValueAsString(tpu);
+
+        MvcResult result =
+                mockMvc.perform(
+                                post("/bank/users/owners/tpu")
+                                        .content(body)
+                                        .contentType(MediaType.APPLICATION_JSON))
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(status().isCreated())
+                        .andReturn();
+
+        List<ThirdParty> tp = thirdPartyRepository.findAll();
+        assertEquals(2,tp.size());
+        assertEquals("Another TPU", tp.get(tp.size()-1).getName());
     }
 
 

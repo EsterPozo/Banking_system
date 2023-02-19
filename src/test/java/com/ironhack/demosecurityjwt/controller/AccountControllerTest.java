@@ -88,25 +88,6 @@ public class AccountControllerTest {
         accountHolderRepository.save(accountHolder2);
         thirdPartyRepository.save(tpu);
 
-//        Checking check = new Checking(
-//                tpu,
-//                new Money(BigDecimal.valueOf(10000L)),
-//                "43211234");
-//        StudentChecking stCheck = new StudentChecking(
-//                ah2,
-//                new Money(BigDecimal.valueOf(5000L)),
-//                "12345678");
-//        Savings sav = new Savings(
-//                ah,
-//                new Money(BigDecimal.valueOf(10000L)),
-//                "98765432");
-//        sav.setSecondaryOwner(ah2);
-//        CreditCard cc = new CreditCard(
-//                ah,
-//                new Money(BigDecimal.valueOf(1000L)));
-//
-//        repository.saveAll(List.of(check, stCheck, sav, cc));
-
         Checking checkingAccount = new Checking(new Money(BigDecimal.valueOf(1000L)),accountHolder,  "1234");
         StudentChecking studentCheckingAccount = new StudentChecking(new Money(BigDecimal.valueOf(1200L)),accountHolder2,  "4321");
         Savings savingsAccount = new Savings( new Money(BigDecimal.valueOf(1000L)), accountHolder, "1234");

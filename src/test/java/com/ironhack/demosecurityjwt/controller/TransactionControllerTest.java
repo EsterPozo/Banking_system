@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +29,8 @@ import org.springframework.web.context.WebApplicationContext;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -79,6 +82,8 @@ public class TransactionControllerTest {
                 "Mr. Account Holder", "mister", "password1",
                 LocalDate.of(1990, 4, 14),
                 new Address("Calle Velázquez 1", "Gijón", "33201"));
+
+
 
         AccountHolder accountHolder2 = new AccountHolder(
                 "Mrs. Account Holder", "mistress", "password",

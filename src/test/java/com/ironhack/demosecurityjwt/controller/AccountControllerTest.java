@@ -11,6 +11,7 @@ import com.ironhack.demosecurityjwt.repositories.transaction.TransactionReposito
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
 import com.ironhack.demosecurityjwt.repositories.user.AdminRepository;
 import com.ironhack.demosecurityjwt.repositories.user.ThirdPartyRepository;
+import com.ironhack.demosecurityjwt.services.impl.user.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.ParameterResolutionDelegate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +29,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -64,6 +68,9 @@ public class AccountControllerTest {
     @Autowired
     private ThirdPartyRepository thirdPartyRepository;
 
+    @Autowired
+    private UserService userService;
+
     @BeforeEach
     void setUp() {
 
@@ -77,6 +84,15 @@ public class AccountControllerTest {
                 LocalDate.of(1990, 4, 14),
                 new Address("Calle Velázquez 1", "Gijón", "33201"));
 
+//        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//        accountHolder.getRoles().forEach(role -> {
+//            authorities.add(new SimpleGrantedAuthority(role.getName()));
+//        });
+//        // Return the user details, including the username, password, and authorities
+//        accountHolder.getAuthorities();
+//    new org.springframework.security.core.userdetails.User(accountHolder.getUsername(), accountHolder.getPassword(), authorities);
+
+
         AccountHolder accountHolder2 = new AccountHolder(
                 "Mrs. Account Holder", "mistress", "password",
                 LocalDate.of(2000, 4, 14),
@@ -86,6 +102,8 @@ public class AccountControllerTest {
         ThirdParty tpu = new ThirdParty("Third Party User","thirdpartyuser","thirdpartyuser", "hashedKey");
         accountHolderRepository.save(accountHolder);
         accountHolderRepository.save(accountHolder2);
+//        User user1 = (User) userService.loadUserByUsername("mistress");
+//        accountHolderRepository.save((AccountHolder) user1);
         thirdPartyRepository.save(tpu);
 
         Checking checkingAccount = new Checking(new Money(BigDecimal.valueOf(1000L)),accountHolder,  "1234");
@@ -118,7 +136,8 @@ public class AccountControllerTest {
     }
 
     @Test
-
+ //@WithMockUser(username = "mister", password = "password1", roles = {"ROLE_ACCOUNT_HOLDER"})
+   // @WithMockUser(username = "mister", password = "password1", roles = {"ROLE_ACCOUNT_HOLDER"})
     void getAccounts() throws Exception {
 
         MvcResult result = mockMvc.perform(

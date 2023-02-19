@@ -10,10 +10,13 @@ import com.ironhack.demosecurityjwt.repositories.user.RoleRepository;
 import com.ironhack.demosecurityjwt.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +55,13 @@ public class AccountHolderService {
 
     accountHolder.setUsername(accountHolderDTO.getUsername());
     accountHolder.setPassword(passwordEncoder.encode(accountHolderDTO.getPassword()));
+
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        accountHolder.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        });
+        // Return the user details, including the username, password, and authorities
+        new org.springframework.security.core.userdetails.User(accountHolder.getUsername(), accountHolder.getPassword(), authorities);
 
     return accountHolderRepository.save(accountHolder);
 

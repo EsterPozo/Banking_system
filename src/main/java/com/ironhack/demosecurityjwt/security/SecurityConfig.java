@@ -71,39 +71,42 @@ public class SecurityConfig {
         // CustomAuthenticationFilter instance created
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authManagerBuilder.getOrBuild());
         // set the URL that the filter should process
-      customAuthenticationFilter.setFilterProcessesUrl("/bank/accounts/");
+     customAuthenticationFilter.setFilterProcessesUrl("/bank");
+        customAuthenticationFilter.setFilterProcessesUrl("/accounts");
         // disable CSRF protection
-        http.csrf().disable();/*authorizeRequests()
-                .requestMatchers(GET, "/bank/accounts/**").hasRole("ROLE_ACCOUNT_HOLDER")
-                .anyRequest().denyAll();*/
+        http.csrf().disable();
         // set the session creation policy to stateless
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         // set up authorization for different request matchers and user roles
         http.authorizeHttpRequests((requests) -> requests
 
-              //  Admins should be able to access the balance for any account and to modify it. - understanding they can do ALL methods of accounts and transactions.
-//             .requestMatchers(GET, "/bank/accounts/**").hasAnyAuthority("ROLE_ADMIN")
-//                .requestMatchers(POST, "/bank/accounts/**").hasAnyAuthority("ROLE_ADMIN")
+                //AUTHORIZATION NOT WORKING... BUT SHOULD HAVE FOLLOWING STRUCTURE:
+
+                //  Admins should be able to access the balance for any account and to modify it. - understanding they can do ALL methods of accounts and transactions.
+
 //                .requestMatchers(GET, "/accounts/**").hasAnyAuthority("ROLE_ADMIN")
 //                .requestMatchers(POST, "/accounts/**").hasAnyAuthority("ROLE_ADMIN")
 //                .requestMatchers(GET, "/bank/**").hasAnyAuthority("ROLE_ADMIN")
 //                .requestMatchers(POST, "/bank/**").hasAnyAuthority("ROLE_ADMIN")
-//                //Account Holders accesses
-            //    .requestMatchers(GET,"/bank/accounts/**").hasRole("ROLE_ACCOUNT_HOLDER")
-//                .requestMatchers(GET, "/bank/accounts/**").hasAuthority("ROLE_ACCOUNT_HOLDER"));
-//                .requestMatchers(GET, "/bank/accounts/**").permitAll());
+
+                // Account Holders accesses
+
+//                .requestMatchers(GET, "/bank/accounts/**").hasAuthority("ROLE_ACCOUNT_HOLDER"))
 //                .requestMatchers(POST, "/accounts/transfer").hasAuthority("ROLE_ACCOUNT_HOLDER")
+
 //                //Third party users
+
 //                .requestMatchers(POST,"/accounts/transfer").hasAuthority("ROLE_THIRD_PARTY")
 //                .requestMatchers(GET, "/accounts/**").hasAuthority("ROLE_THIRD_PARTY")
 //                .anyRequest().authenticated())
 //                .anyRequest().denyAll());
+
                 .anyRequest().permitAll());
 
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);
         // Add the custom authorization filter before the standard authentication filter.
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+       http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         // Build the security filter chain to be returned.
         return http.build();

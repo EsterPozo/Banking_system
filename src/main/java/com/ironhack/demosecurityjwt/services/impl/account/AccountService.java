@@ -179,16 +179,21 @@ public class AccountService implements IAccountService {
     }
 
     public Account addCreditCard(AccountDTO accountDTO) {
-        if (!accountHolderRepository.existsById(accountDTO.getOwnerId()) || !accountHolderRepository.existsById(accountDTO.getOtherOwnerId())) {
+        if (!accountHolderRepository.existsById(accountDTO.getOwnerId()) && !accountHolderRepository.existsById(accountDTO.getOtherOwnerId())) {
             throw new ResponseStatusException(BAD_REQUEST, "Id not valid");
         }
         AccountHolder owner = accountHolderRepository.findById(accountDTO.getOwnerId()).get();
-        AccountHolder otherOwner = accountHolderRepository.findById(accountDTO.getOtherOwnerId()).get();
+        AccountHolder otherOwner = new AccountHolder();
+        if(accountDTO.getOtherOwnerId() != null) {
+           otherOwner = accountHolderRepository.findById(accountDTO.getOtherOwnerId()).get();
+        }
 
         CreditCard creditCard = new CreditCard();
         creditCard.setPrimaryOwner(owner);
-        creditCard.setSecondaryOwner(otherOwner);
         creditCard.setBalance(new Money(accountDTO.getBalance()));
+        if(otherOwner.getId() != null) {
+            creditCard.setSecondaryOwner(otherOwner);
+        }
         if (accountDTO.getInterestRate() != null) creditCard.setInterestRate(accountDTO.getInterestRate());
 
         if(accountDTO.getCreditLimit() !=null) creditCard.setCreditLimit(new Money(accountDTO.getCreditLimit()));

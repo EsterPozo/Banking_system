@@ -65,19 +65,20 @@ public class MoneyTransferServiceTest {
     @BeforeEach
     void setUp() {
         AccountHolder accountHolder = new AccountHolder(
-                "Alejandro Martinez",
+                "Alejandro Martinez", "username1", "password",
                 LocalDate.of(1984, 4, 14),
                 new Address("Calle Velázquez 1", "Gijón", "33201"));
-        accountHolder.setUsername("username1");
-        accountHolder.setPassword("password");
+
         AccountHolder accountHolder2 = new AccountHolder(
-                "Alba Pou",
+                "Alba Pou", "username2", "password",
                 LocalDate.of(1990, 4, 14),
                 new Address("Calle Pizarro 1", "Barcelona", "08201"));
-        accountHolder2.setUsername("username2");
-        accountHolder2.setPassword("password2");
 
-        ThirdParty thirdPartyUser = new ThirdParty("Google", "Hola");
+        ThirdParty thirdPartyUser = new ThirdParty("Google","username2","password", "elgooG");
+
+        accountHolderRepository.save(accountHolder);
+        accountHolderRepository.save(accountHolder2);
+        thirdPartyRepository.save(thirdPartyUser);
 
         accountHolderRepository.save(accountHolder);
         accountHolderRepository.save(accountHolder2);

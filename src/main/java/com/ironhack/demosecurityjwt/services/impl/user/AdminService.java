@@ -6,6 +6,7 @@ import com.ironhack.demosecurityjwt.models.user.Role;
 import com.ironhack.demosecurityjwt.repositories.user.AdminRepository;
 import com.ironhack.demosecurityjwt.repositories.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,9 @@ public class AdminService {
 
     @Autowired
     private AdminRepository adminRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private UserRepository userRepository;
 
@@ -27,9 +31,9 @@ public class AdminService {
     public Admin addAdmin(UserDTO userDTO) {
         Admin admin = new Admin();
         admin.setUsername(userDTO.getUsername());
-        admin.setPassword(userDTO.getPassword());
+        admin.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         admin.setName(userDTO.getName());
-       // admin.getRoles().add(new Role("ROLE_ADMIN"));
+
         return adminRepository.save(admin);
     }
 

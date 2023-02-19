@@ -60,21 +60,38 @@ public class UserServicesTest {
 
     @BeforeEach
     void setUp() {
+
         AccountHolder accountHolder = new AccountHolder(
-                "Alejandro Martinez",
+                "Alejandro Martinez", "username1", "password",
                 LocalDate.of(1984, 4, 14),
                 new Address("Calle Velázquez 1", "Gijón", "33201"));
-        accountHolder.setUsername("username1");
-        accountHolder.setPassword("password");
 
-        AccountHolder accountHolder2 = new AccountHolder("Alba Pou", "alba_pou", "1234", LocalDate.of(1990, 4, 14), new Address("Calle Pizarro", "Mataro", "08032"));
-        //ThirdParty thirdPartyUser = new ThirdParty("Google", "Hola");
+        AccountHolder accountHolder2 = new AccountHolder(
+                "Alba Pou", "username2", "password",
+                LocalDate.of(1990, 4, 14),
+                new Address("Calle Pizarro 1", "Barcelona", "08201"));
+
+        ThirdParty thirdPartyUser = new ThirdParty("Google","username2","password", "elgooG");
 
         accountHolderRepository.save(accountHolder);
-        userService.addRoleToUser("username1","ROLE_ACCOUNT_HOLDER");
         accountHolderRepository.save(accountHolder2);
-       // userService.addRoleToUser("alba_pou", "ROLE_ACCOUNT_HOLDER" );
-        //thirdPartyRepository.save(thirdPartyUser);
+        thirdPartyRepository.save(thirdPartyUser);
+
+//        AccountHolder accountHolder = new AccountHolder(
+//                "Alejandro Martinez",
+//                LocalDate.of(1984, 4, 14),
+//                new Address("Calle Velázquez 1", "Gijón", "33201"));
+//        accountHolder.setUsername("username1");
+//        accountHolder.setPassword("password");
+//
+//        AccountHolder accountHolder2 = new AccountHolder("Alba Pou", "alba_pou", "1234", LocalDate.of(1990, 4, 14), new Address("Calle Pizarro", "Mataro", "08032"));
+//        //ThirdParty thirdPartyUser = new ThirdParty("Google", "Hola");
+//
+//        accountHolderRepository.save(accountHolder);
+//        userService.addRoleToUser("username1","ROLE_ACCOUNT_HOLDER");
+//        accountHolderRepository.save(accountHolder2);
+//       // userService.addRoleToUser("alba_pou", "ROLE_ACCOUNT_HOLDER" );
+//        //thirdPartyRepository.save(thirdPartyUser);
 
         Admin admin = new Admin();
         admin.setName("Alejandro");
@@ -97,7 +114,7 @@ public class UserServicesTest {
     @Test
     void getOwners() {
         List<AccountHolder> owners = accountHolderService.getOwners();
-        assertEquals(1, owners.size());
+        assertEquals(2, owners.size());
     }
 
     @Test
@@ -136,12 +153,12 @@ public class UserServicesTest {
         thirdPartyUserDTO.setName("Hello World");
         thirdPartyUserDTO.setHashedKey("W0RLDH3LL0");
         thirdPartyUserDTO.setUsername("username");
-        thirdPartyUserDTO.setPassword("password");
+        thirdPartyUserDTO.setPassword("1234");
 
         ThirdParty thirdPartyUser = thirdPartyService.addThirdParty(thirdPartyUserDTO);
 
         List<User> owners = userRepository.findAll();
-        assertEquals(3, owners.size());
+        assertEquals(5, owners.size());
         assertEquals("Hello World", owners.get(owners.size()-1).getName());
     }
 
@@ -159,7 +176,7 @@ public class UserServicesTest {
         adminService.addAdmin(userDTO);
 
         assertEquals(2, adminRepository.findAll().size());
-        assertEquals(7, userRepository.findAll().size());
+        assertEquals(9, userRepository.findAll().size());
     }
 
 

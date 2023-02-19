@@ -4,10 +4,13 @@ import com.ironhack.demosecurityjwt.dtos.user.AccountHolderDTO;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
 import com.ironhack.demosecurityjwt.models.user.Address;
 import com.ironhack.demosecurityjwt.models.user.Role;
+import com.ironhack.demosecurityjwt.models.user.User;
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
 import com.ironhack.demosecurityjwt.repositories.user.RoleRepository;
+import com.ironhack.demosecurityjwt.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,11 +19,19 @@ import java.util.Optional;
 
 @Service
 public class AccountHolderService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private AccountHolderRepository accountHolderRepository;
 
     @Autowired
+    private SecurityConfig securityConfig;
+
+    @Autowired
     private RoleRepository roleRepository;
+
+
 
     public List<AccountHolder> getOwners() {
         return accountHolderRepository.findAll();
@@ -40,10 +51,8 @@ public class AccountHolderService {
     accountHolder.setMailingAddress(new Address(accountHolderDTO.getMailingStreet(), accountHolderDTO.getMailingCity(), accountHolderDTO.getMailingPostalCode()));
 
     accountHolder.setUsername(accountHolderDTO.getUsername());
-    accountHolder.setPassword(accountHolderDTO.getPassword()); //need to be encrypted
-    //accountHolder.getRoles().add(new Role("ROLE_ACCOUNT_HOLDER"));
-        Role role = roleRepository.findByName("ROLE_ACCOUNT_HOLDER");
-        accountHolder.getRoles().add(role);
+    accountHolder.setPassword(passwordEncoder.encode(accountHolderDTO.getPassword()));
+
     return accountHolderRepository.save(accountHolder);
 
     }

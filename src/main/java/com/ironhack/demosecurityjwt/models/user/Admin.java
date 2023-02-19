@@ -16,6 +16,8 @@ public class Admin extends User{
 
     }
 
+
+
     public Admin(String name, String username, String password) {
         super(name, username, password, List.of(new Role(1L,"ROLE_ADMIN")));
     }

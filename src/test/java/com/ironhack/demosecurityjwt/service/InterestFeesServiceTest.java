@@ -5,6 +5,7 @@ import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.*;
 import com.ironhack.demosecurityjwt.models.user.AccountHolder;
 import com.ironhack.demosecurityjwt.models.user.Address;
+import com.ironhack.demosecurityjwt.models.user.ThirdParty;
 import com.ironhack.demosecurityjwt.repositories.account.*;
 import com.ironhack.demosecurityjwt.repositories.transaction.TransactionRepository;
 import com.ironhack.demosecurityjwt.repositories.user.AccountHolderRepository;
@@ -66,26 +67,21 @@ public class InterestFeesServiceTest {
 
 
         AccountHolder accountHolder = new AccountHolder(
-                "Alejandro Martinez",
+                "Alejandro Martinez", "username1", "password",
                 LocalDate.of(1984, 4, 14),
                 new Address("Calle Velázquez 1", "Gijón", "33201"));
-        accountHolder.setUsername("username1");
-        accountHolder.setPassword("password");
+
         AccountHolder accountHolder2 = new AccountHolder(
-                "Alba Pou",
+                "Alba Pou", "username2", "password",
                 LocalDate.of(1990, 4, 14),
                 new Address("Calle Pizarro 1", "Barcelona", "08201"));
-        accountHolder2.setUsername("username2");
-        accountHolder2.setPassword("password");
 
-//        ThirdParty thirdPartyUser = new ThirdParty("Google", "elgooG");
-//        thirdPartyUser.setUsername("username2");
-//        thirdPartyUser.setPassword("password");
+       ThirdParty thirdPartyUser = new ThirdParty("Google","username2","password", "elgooG");
 
         accountHolderRepository.save(accountHolder);
         accountHolderRepository.save(accountHolder2);
-//       // thirdPartyRepository.save(thirdPartyUser);
-//
+        thirdPartyRepository.save(thirdPartyUser);
+
         Checking checkingAccount = new Checking(new Money(BigDecimal.valueOf(1000L)),accountHolder,  "1234");
         StudentChecking studentCheckingAccount = new StudentChecking(new Money(BigDecimal.valueOf(1200L)),accountHolder,  "4321");
         savingsAccount = new Savings( new Money(BigDecimal.valueOf(1000L)), accountHolder, "1234");

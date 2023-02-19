@@ -233,30 +233,32 @@ public class AccountControllerTest {
         assertTrue(result.getResponse().getContentAsString().contains("1000.00")); // default minimumBalance
     }
 
-//    @Test
-//   // @WithMockUser(username = "admin", password = "ironhack", roles = {"ADMIN"})
-//    void addCreditCard() throws Exception {
-//        List<AccountHolder> owners = accountHolderRepository.findAll();
-//        Long idOwner = owners.get(1).getId();
-//
-//        AccountDTO cc = new AccountDTO();
-//        cc.setBalance(BigDecimal.valueOf(2000L));
-//        cc.setInterestRate(new BigDecimal("0.1234"));
-//        cc.setCreditLimit(BigDecimal.valueOf(2121));
-//        cc.setOwnerId( idOwner);
-//        String body = objectMapper.writeValueAsString(cc);
-//
-//                MvcResult result =
-//                mockMvc.perform(
-//                                post("/bank/accounts/creditcard/")
-//                                        .content(body)
-//                                        .contentType(MediaType.APPLICATION_JSON))
-//                        .andExpect(status().isCreated())
-//                        .andReturn();
-//       // assertTrue(result.getResponse().getContentAsString().contains(owners.get(0).getName()));
-//       // assertTrue(result.getResponse().getContentAsString().contains("0.1234")); // interestRate
-//      //  assertTrue(result.getResponse().getContentAsString().contains("100.00")); // default creditLimit
-//    }
+    @Test
+    //@WithMockUser(username = "admin", password = "ironhack")
+    void addCreditCard() throws Exception {
+        List<AccountHolder> owners = accountHolderRepository.findAll();
+        System.out.println(owners.size());
+        Long idOwner = owners.get(1).getId();
+
+        AccountDTO cc = new AccountDTO();
+        cc.setBalance(BigDecimal.valueOf(2000L));
+        cc.setInterestRate(new BigDecimal("0.1234"));
+        cc.setCreditLimit(BigDecimal.valueOf(2121));
+        cc.setOwnerId( idOwner);
+        String body = objectMapper.writeValueAsString(cc);
+
+                MvcResult result =
+                mockMvc.perform(
+                                post("/bank/accounts/creditcard/")
+                                        .content(body)
+                                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andReturn();
+
+       assertTrue(result.getResponse().getContentAsString().contains(owners.get(1).getName()));
+       assertTrue(result.getResponse().getContentAsString().contains("0.1234")); // interestRate
+       assertTrue(result.getResponse().getContentAsString().contains("2121.00")); // default creditLimit
+    }
 
 //    @Test
 //    void transferMoney() throws Exception {

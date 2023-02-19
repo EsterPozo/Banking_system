@@ -26,7 +26,7 @@ public class TransactionController {
 
     @GetMapping("/accounts/{id}/transactions")
     @ResponseStatus(HttpStatus.OK)
-    public List<Transaction> getTransactionByAccount(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long idAccount) {
-        return transactionService.getTransactionByAccount(userDetails,idAccount);
+    public List<Transaction> getTransactionByAccount(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
+        return transactionService.getTransactionByAccount(userDetails,id);
     }
 }

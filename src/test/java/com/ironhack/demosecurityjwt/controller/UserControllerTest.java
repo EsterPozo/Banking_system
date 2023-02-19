@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ironhack.demosecurityjwt.dtos.user.AccountHolderDTO;
 import com.ironhack.demosecurityjwt.dtos.user.ThirdPartyDTO;
+import com.ironhack.demosecurityjwt.dtos.user.UserDTO;
 import com.ironhack.demosecurityjwt.models.Money;
 import com.ironhack.demosecurityjwt.models.account.*;
 import com.ironhack.demosecurityjwt.models.user.*;
@@ -32,8 +33,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -216,6 +217,47 @@ public class UserControllerTest {
         List<ThirdParty> tp = thirdPartyRepository.findAll();
         assertEquals(2,tp.size());
         assertEquals("Another TPU", tp.get(tp.size()-1).getName());
+    }
+
+    @Test
+    //@WithMockUser(username = "admin", password = "ironhack", roles = {"ADMIN"})
+    void getAdmins() throws Exception {
+
+        Admin admin2 = new Admin();
+        admin2.setUsername("admin2");
+        admin2.setPassword("ironhack2");
+        adminRepository.save(admin2);
+
+        MvcResult result =
+                mockMvc.perform(
+                                get("/bank/users/admins"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+        assertTrue(result.getResponse().getContentAsString().contains("admin"));
+        assertTrue(result.getResponse().getContentAsString().contains("admin2"));
+
+    }
+
+    @Test
+    //@WithMockUser(username = "admin", password = "ironhack", roles = {"ADMIN"})
+    void addAdmin() throws Exception {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("Another Admin");
+        userDTO.setUsername("admin_");
+        userDTO.setPassword("helloworld");
+        String body = objectMapper.writeValueAsString(userDTO);
+
+        MvcResult result =
+                mockMvc.perform(
+                                post("/bank/users/admins")
+                                        .content(body)
+                                        .contentType(MediaType.APPLICATION_JSON))
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(status().isCreated())
+                        .andReturn();
+        assertTrue(result.getResponse().getContentAsString().contains("admin_"));
+        assertTrue(result.getResponse().getContentAsString().contains("Another Admin"));
+        assertEquals(2, adminRepository.findAll().size());
     }
 
 
